@@ -1,0 +1,972 @@
+/*!
+ * PikPak Dark Mode
+ * A standalone theme layer for the PikPak desktop app.
+ *
+ * This file is injected into resources/app/out/main-renderer/index.html by
+ * apply-darkmode.ps1. It styles the app through its own tokens/classes and
+ * does not modify PikPak's bundled JavaScript.
+ */
+
+html.pikpak-dark {
+  color-scheme: dark !important;
+
+  /* App tokens */
+  --color-primary-text: #f2f4f8 !important;
+  --color-secondary-text: #aeb6c2 !important;
+  --color-tertiary-text: #8a94a3 !important;
+  --color-hover: #2a2c31 !important;
+  --color-active: #33353b !important;
+  --text-normal-color: #f2f4f8 !important;
+  --container-bg: #151517 !important;
+  --menu-bg-color: #232428 !important;
+  --sidebar-bg-color: #18191c !important;
+
+  /* Element Plus tokens */
+  --el-bg-color: #1c1d20 !important;
+  --el-bg-color-page: #131316 !important;
+  --el-bg-color-overlay: #232428 !important;
+  --el-text-color-primary: #f2f4f8 !important;
+  --el-text-color-regular: #d7dbe2 !important;
+  --el-text-color-secondary: #aeb6c2 !important;
+  --el-text-color-placeholder: #7d8794 !important;
+  --el-text-color-disabled: #5c6470 !important;
+  --el-border-color: #35373d !important;
+  --el-border-color-light: #2c2e33 !important;
+  --el-border-color-lighter: #26282c !important;
+  --el-border-color-extra-light: #222327 !important;
+  --el-border-color-dark: #3c3f46 !important;
+  --el-border-color-darker: #454951 !important;
+  --el-fill-color: #2a2c31 !important;
+  --el-fill-color-light: #24262a !important;
+  --el-fill-color-lighter: #202226 !important;
+  --el-fill-color-extra-light: #1d1f22 !important;
+  --el-fill-color-dark: #303238 !important;
+  --el-fill-color-darker: #36393f !important;
+  --el-fill-color-blank: #1c1d20 !important;
+  --el-mask-color: rgba(10, 10, 12, 0.75) !important;
+  --el-mask-color-extra-light: rgba(10, 10, 12, 0.3) !important;
+  --el-disabled-bg-color: #24262a !important;
+  --el-box-shadow: 0 12px 32px 4px rgba(0, 0, 0, 0.36), 0 8px 20px rgba(0, 0, 0, 0.45) !important;
+  --el-box-shadow-light: 0 0 12px rgba(0, 0, 0, 0.5) !important;
+  --el-box-shadow-lighter: 0 0 6px rgba(0, 0, 0, 0.5) !important;
+  --el-box-shadow-dark: 0 16px 48px 16px rgba(0, 0, 0, 0.36), 0 12px 32px rgba(0, 0, 0, 0.45), 0 8px 16px -8px rgba(0, 0, 0, 0.5) !important;
+  --el-color-primary-light-3: #5a8dff !important;
+  --el-color-primary-light-5: #7ba5ff !important;
+  --el-color-primary-light-7: #9cbdff !important;
+  --el-color-primary-light-8: #adc9ff !important;
+  --el-color-primary-light-9: #202b3f !important;
+  --el-color-primary-dark-2: #2456cc !important;
+  --el-color-success-light-9: #17372f !important;
+  --el-color-warning-light-9: #3a2c17 !important;
+  --el-color-danger-light-9: #3d1e15 !important;
+  --el-color-error-light-9: #3d1e15 !important;
+  --el-color-info-light-9: #26282c !important;
+  --el-color-danger: #ff7a52 !important;
+  --el-color-error: #ff7a52 !important;
+  --el-color-success: #54cfad !important;
+}
+
+/* Base surfaces */
+html.pikpak-dark body,
+html.pikpak-dark #app,
+html.pikpak-dark .layout,
+html.pikpak-dark .main,
+html.pikpak-dark .container,
+html.pikpak-dark .file-explorer {
+  background-color: #151517 !important;
+  color: #f2f4f8 !important;
+}
+
+/* Header */
+html.pikpak-dark .header-bar {
+  background-color: #1b1c1f !important;
+  border-bottom: 1px solid #2a2c31 !important;
+  color: #f2f4f8 !important;
+}
+html.pikpak-dark .header-bar .pp-link-button,
+html.pikpak-dark .header-bar .pp-link-button:visited {
+  color: #d7dbe2 !important;
+}
+html.pikpak-dark .header-bar .pp-link-button:hover {
+  color: #ffffff !important;
+}
+
+/* Sidebar */
+html.pikpak-dark .sidebar {
+  background-color: #141518 !important;
+  color: #d7dbe2 !important;
+}
+/* The sidebar nav ships with a hardcoded light hover (#ebebf0). */
+html.pikpak-dark .nav a:hover,
+html.pikpak-dark .nav a .hover {
+  background: #2a2c31 !important;
+}
+
+/* Search / toolbar */
+html.pikpak-dark .search-form {
+  background-color: #26282c !important;
+}
+html.pikpak-dark .search-input {
+  color: #f2f4f8 !important;
+}
+html.pikpak-dark .information-icon {
+  background-color: #2a2c31 !important;
+}
+html.pikpak-dark .thumbnail {
+  background-color: #25272b !important;
+}
+html.pikpak-dark .grid-operation .checkbox-wrap,
+html.pikpak-dark .grid-operation .pp-link-button {
+  background-color: #2a2c31 !important;
+}
+
+/* File thumbnails / folders */
+html.pikpak-dark .blur,
+html.pikpak-dark .thumbnail .blur,
+html.pikpak-dark .file-cover .blur,
+html.pikpak-dark .file-cover.flex-center .blur {
+  background-color: #25272b !important;
+}
+html.pikpak-dark .folder-cover,
+html.pikpak-dark .folder-cover .cover {
+  background-color: #25272b !important;
+}
+html.pikpak-dark .folder-cover .cover::before {
+  background: linear-gradient(180deg, rgba(21, 21, 23, 0) 0%, rgba(21, 21, 23, 0.6) 100%) !important;
+}
+html.pikpak-dark .placeholder {
+  background-color: #25272b !important;
+}
+html.pikpak-dark .error {
+  background-color: #25272b !important;
+  color: #8a94a3 !important;
+}
+html.pikpak-dark .grid.folder.row {
+  background-color: transparent !important;
+}
+/* Grid items ship with a hardcoded light hover (#f2f3f4); folders are
+   transparent already, so only restyle the rest. */
+html.pikpak-dark .file-explorer .row.grid:hover:not(.folder):not(.selected):not(.highlight) {
+  background: #2a2c31 !important;
+}
+
+/* Transfer panel */
+html.pikpak-dark .transfer {
+  background-color: #1b1c1f !important;
+  color: #f2f4f8 !important;
+  border-top: 1px solid #2a2c31 !important;
+}
+html.pikpak-dark .transfer-content {
+  background-color: #1b1c1f !important;
+}
+html.pikpak-dark .transfer .pp-link-button {
+  color: #d7dbe2 !important;
+}
+html.pikpak-dark .transfer .pp-link-button:hover {
+  color: #ffffff !important;
+}
+
+/* Storage / progress */
+html.pikpak-dark .disk-usage .progress {
+  background-color: #303238 !important;
+}
+html.pikpak-dark .disk-usage .progress-bar {
+  background-color: #306eff !important;
+}
+html.pikpak-dark .disk-usage .progress-bar.premium {
+  background-color: #d1ae6a !important;
+}
+html.pikpak-dark .disk-usage .icon-info {
+  background-color: #8a94a3 !important;
+  color: #aeb6c2 !important;
+}
+html.pikpak-dark .mobile-app,
+html.pikpak-dark .browser-extension,
+html.pikpak-dark .tv-app {
+  background-color: #8a94a3 !important;
+  filter: none !important;
+}
+
+/* Dividers */
+html.pikpak-dark .el-divider,
+html.pikpak-dark .el-divider--horizontal {
+  background-color: #2f3136 !important;
+  border-top-color: #2f3136 !important;
+}
+
+/* Buttons / inputs */
+html.pikpak-dark .el-button:not(.el-button--primary):not(.el-button--danger):not(.el-button--success):not(.el-button--warning):not(.el-button--info) {
+  --el-button-bg-color: #26282c;
+  --el-button-border-color: #35373d;
+  --el-button-text-color: #e6e9ef;
+  --el-button-hover-bg-color: #303238;
+  --el-button-hover-border-color: #3c3f46;
+  --el-button-hover-text-color: #ffffff;
+  --el-button-active-bg-color: #36393f;
+  --el-button-active-border-color: #454951;
+}
+html.pikpak-dark .el-input__wrapper,
+html.pikpak-dark .el-textarea__inner {
+  background-color: #202226 !important;
+  box-shadow: 0 0 0 1px #35373d inset !important;
+  color: #f2f4f8 !important;
+}
+html.pikpak-dark .el-input__inner,
+html.pikpak-dark .el-textarea__inner {
+  color: #f2f4f8 !important;
+}
+
+/* Dialogs / overlays */
+html.pikpak-dark .el-dialog,
+html.pikpak-dark .el-message-box,
+html.pikpak-dark .el-drawer {
+  background-color: #1d1e22 !important;
+  border: 1px solid #2e3035 !important;
+  color: #f2f4f8 !important;
+}
+html.pikpak-dark .el-dialog__title,
+html.pikpak-dark .el-message-box__title {
+  color: #f2f4f8 !important;
+}
+html.pikpak-dark .el-overlay {
+  background-color: rgba(0, 0, 0, 0.72) !important;
+}
+
+/* Menus / poppers */
+html.pikpak-dark .el-popper,
+html.pikpak-dark .el-dropdown-menu,
+html.pikpak-dark .el-select-dropdown,
+html.pikpak-dark .el-picker-panel,
+html.pikpak-dark .el-menu {
+  background-color: #232428 !important;
+  border-color: #35373d !important;
+  color: #e6e9ef !important;
+}
+html.pikpak-dark .el-dropdown-menu__item:not(.is-disabled):hover,
+html.pikpak-dark .el-select-dropdown__item.hover,
+html.pikpak-dark .el-select-dropdown__item:hover {
+  background-color: #2f3136 !important;
+  color: #ffffff !important;
+}
+html.pikpak-dark .el-popover {
+  background-color: #232428 !important;
+  border-color: #35373d !important;
+  color: #e6e9ef !important;
+}
+html.pikpak-dark .el-popper.is-dark {
+  background-color: #2b2d32 !important;
+  border-color: #3c3f46 !important;
+  color: #f2f4f8 !important;
+}
+html.pikpak-dark .el-popper.is-dark > .el-popper__arrow::before {
+  background-color: #2b2d32 !important;
+  border-color: #3c3f46 !important;
+}
+html.pikpak-dark .el-scrollbar__thumb {
+  background-color: #ffd79d !important;
+}
+html.pikpak-dark .el-scrollbar__thumb:hover {
+  background-color: #ffe6c2 !important;
+}
+
+/* Native scrollbars (Chromium/Electron) */
+html.pikpak-dark::-webkit-scrollbar,
+html.pikpak-dark ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+html.pikpak-dark::-webkit-scrollbar-track,
+html.pikpak-dark ::-webkit-scrollbar-track {
+  background: #202126;
+}
+html.pikpak-dark::-webkit-scrollbar-thumb,
+html.pikpak-dark ::-webkit-scrollbar-thumb {
+  background-color: #ffd79d;
+  border: 2px solid #202126;
+  border-radius: 8px;
+}
+html.pikpak-dark::-webkit-scrollbar-thumb:hover,
+html.pikpak-dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #ffe6c2;
+}
+html.pikpak-dark::-webkit-scrollbar-thumb:active,
+html.pikpak-dark ::-webkit-scrollbar-thumb:active {
+  background-color: #fff1d9;
+}
+html.pikpak-dark::-webkit-scrollbar-corner,
+html.pikpak-dark ::-webkit-scrollbar-corner {
+  background: #202126;
+}
+html.pikpak-dark::-webkit-scrollbar-button,
+html.pikpak-dark ::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* ==========================================================================
+   Theme switcher (injected UI)
+   ========================================================================== */
+
+#ppdm-toggle {
+  position: fixed;
+  right: 18px;
+  bottom: 104px;
+  z-index: 2147483000;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #384252;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(16, 24, 40, 0.14);
+  box-shadow: 0 6px 20px rgba(16, 24, 40, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+#ppdm-toggle:hover {
+  background: #ffffff;
+  border-color: rgba(16, 24, 40, 0.24);
+}
+#ppdm-toggle:active { transform: scale(0.94); }
+#ppdm-toggle .ppdm-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Never show the switcher inside player / file-manager windows */
+html[data-pikpak-route^="#player"] #ppdm-toggle,
+html[data-pikpak-route^="#file-manager"] #ppdm-toggle {
+  display: none !important;
+}
+
+#ppdm-panel {
+  position: absolute;
+  right: 0;
+  bottom: 48px;
+  width: 248px;
+  padding: 8px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e3e6eb;
+  box-shadow: 0 14px 40px rgba(16, 24, 40, 0.18);
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+}
+#ppdm-toggle.is-open #ppdm-panel { display: flex; }
+#ppdm-panel .ppdm-panel-title {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a94a3;
+  padding: 6px 10px 4px;
+}
+#ppdm-panel .ppdm-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #333a45;
+  font-size: 13px;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+#ppdm-panel .ppdm-option:hover { background: #f1f3f6; color: #1b2028; }
+#ppdm-panel .ppdm-option.is-active {
+  background: rgba(48, 110, 255, 0.12);
+  color: #2f6bff;
+}
+#ppdm-panel .ppdm-option svg { flex: 0 0 auto; }
+
+/* Author card + donation footer */
+#ppdm-panel .ppdm-panel-divider {
+  height: 1px;
+  margin: 8px 4px 6px;
+  background: linear-gradient(90deg, transparent, #e3e6eb 18%, #e3e6eb 82%, transparent);
+}
+#ppdm-panel .ppdm-author {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(79, 139, 255, 0.18);
+  background:
+    radial-gradient(120% 150% at 100% 0%, rgba(139, 92, 246, 0.16), transparent 55%),
+    linear-gradient(135deg, rgba(79, 139, 255, 0.1), rgba(255, 109, 192, 0.06));
+}
+#ppdm-panel .ppdm-avatar {
+  position: relative;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+}
+#ppdm-panel .ppdm-avatar-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #4f8bff, #8b5cf6, #ff6dc0, #4f8bff);
+  animation: ppdm-avatar-spin 7s linear infinite;
+}
+#ppdm-panel .ppdm-avatar-face {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(140deg, #4f8bff 0%, #8b5cf6 60%, #ff6dc0 120%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 5px 14px rgba(79, 139, 255, 0.35);
+  text-shadow: 0 1px 2px rgba(16, 24, 40, 0.28);
+}
+#ppdm-panel .ppdm-avatar-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.24s ease;
+}
+#ppdm-panel .ppdm-avatar-img.is-loaded { opacity: 1; }
+#ppdm-panel .ppdm-avatar-status {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #34c759;
+  border: 2px solid #ffffff;
+  animation: ppdm-status-pulse 2.4s ease-out infinite;
+}
+#ppdm-panel .ppdm-author-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+#ppdm-panel .ppdm-author-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+#ppdm-panel .ppdm-author-name-text {
+  background: linear-gradient(92deg, #2f6bff 0%, #8b5cf6 55%, #ff5fb0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+#ppdm-panel .ppdm-author-tag {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 999px;
+  color: #2f6bff;
+  background: rgba(79, 139, 255, 0.14);
+}
+#ppdm-panel .ppdm-author-role {
+  font-size: 10.5px;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  color: #6b7484;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+#ppdm-panel .ppdm-author-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 7px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #e3e6eb;
+  background: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333a45;
+  text-decoration: none;
+  transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease,
+    box-shadow 0.18s ease, transform 0.18s ease;
+}
+#ppdm-panel .ppdm-author-link:hover {
+  color: #1b2028;
+  border-color: rgba(79, 139, 255, 0.5);
+  background: linear-gradient(135deg, rgba(79, 139, 255, 0.09), rgba(139, 92, 246, 0.09));
+  box-shadow: 0 6px 16px rgba(79, 139, 255, 0.2);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+#ppdm-panel .ppdm-author-link svg {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+}
+#ppdm-panel .ppdm-author-repo {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+#ppdm-panel .ppdm-author-link svg:last-child {
+  color: #8a94a3;
+  opacity: 0.55;
+  transition: transform 0.18s ease, opacity 0.18s ease, color 0.18s ease;
+}
+#ppdm-panel .ppdm-author-link:hover svg:last-child {
+  color: #2f6bff;
+  opacity: 1;
+  transform: translate(2px, -2px);
+}
+#ppdm-panel .ppdm-donate {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 7px;
+  padding: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0070ba 0%, #1546a0 52%, #8b5cf6 120%);
+  box-shadow: 0 8px 20px rgba(0, 112, 186, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+#ppdm-panel .ppdm-donate::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  bottom: -40%;
+  left: 0;
+  width: 34%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+  transform: translateX(-160%) skewX(-18deg);
+  animation: ppdm-donate-shine 4.2s ease-in-out 1s infinite;
+  pointer-events: none;
+}
+#ppdm-panel .ppdm-donate:hover {
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow: 0 12px 26px rgba(0, 112, 186, 0.44), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+#ppdm-panel .ppdm-donate:active { transform: translateY(0) scale(0.98); }
+#ppdm-panel .ppdm-donate svg,
+#ppdm-panel .ppdm-donate span {
+  position: relative;
+  z-index: 1;
+}
+#ppdm-panel .ppdm-donate svg {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+}
+#ppdm-panel .ppdm-signature {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 7px 0 2px;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: #9aa3b1;
+}
+#ppdm-panel .ppdm-heart {
+  display: inline-flex;
+  color: #ff5f8f;
+  animation: ppdm-heart-beat 2.6s ease-in-out infinite;
+}
+
+/* Switcher in dark mode */
+html.pikpak-dark #ppdm-toggle {
+  color: #e8ecf3;
+  background: rgba(32, 34, 38, 0.92);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+html.pikpak-dark #ppdm-toggle:hover {
+  background: rgba(48, 52, 58, 0.96);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+html.pikpak-dark #ppdm-panel {
+  background: #202226;
+  border-color: #34373d;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+}
+html.pikpak-dark #ppdm-panel .ppdm-panel-title { color: #8a94a3; }
+html.pikpak-dark #ppdm-panel .ppdm-option { color: #d7dbe2; }
+html.pikpak-dark #ppdm-panel .ppdm-option:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #f2f4f8;
+}
+html.pikpak-dark #ppdm-panel .ppdm-option.is-active {
+  background: rgba(79, 139, 255, 0.2);
+  color: #9fc2ff;
+}
+html.pikpak-dark #ppdm-panel .ppdm-panel-divider {
+  background: linear-gradient(90deg, transparent, #3a3d44 18%, #3a3d44 82%, transparent);
+}
+html.pikpak-dark #ppdm-panel .ppdm-author {
+  border-color: rgba(111, 157, 255, 0.22);
+  background:
+    radial-gradient(120% 150% at 100% 0%, rgba(255, 109, 192, 0.14), transparent 55%),
+    linear-gradient(135deg, rgba(79, 139, 255, 0.16), rgba(139, 92, 246, 0.1));
+}
+html.pikpak-dark #ppdm-panel .ppdm-avatar-face {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 5px 16px rgba(0, 0, 0, 0.35);
+}
+html.pikpak-dark #ppdm-panel .ppdm-avatar-status { border-color: #202226; }
+html.pikpak-dark #ppdm-panel .ppdm-author-name-text {
+  background: linear-gradient(92deg, #8fb6ff 0%, #c9a8ff 55%, #ff9ad0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+html.pikpak-dark #ppdm-panel .ppdm-author-tag {
+  color: #9fc2ff;
+  background: rgba(111, 157, 255, 0.22);
+}
+html.pikpak-dark #ppdm-panel .ppdm-author-role { color: #98a0ad; }
+html.pikpak-dark #ppdm-panel .ppdm-author-link {
+  color: #d7dbe2;
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+html.pikpak-dark #ppdm-panel .ppdm-author-link:hover {
+  color: #ffffff;
+  border-color: rgba(111, 157, 255, 0.55);
+  background: linear-gradient(135deg, rgba(79, 139, 255, 0.18), rgba(139, 92, 246, 0.18));
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+html.pikpak-dark #ppdm-panel .ppdm-author-link svg:last-child { color: #8f97a5; }
+html.pikpak-dark #ppdm-panel .ppdm-author-link:hover svg:last-child { color: #9fc2ff; }
+html.pikpak-dark #ppdm-panel .ppdm-donate {
+  box-shadow: 0 8px 22px rgba(0, 112, 186, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+html.pikpak-dark #ppdm-panel .ppdm-donate:hover {
+  box-shadow: 0 12px 28px rgba(139, 92, 246, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+html.pikpak-dark #ppdm-panel .ppdm-signature { color: #7d8695; }
+
+@keyframes ppdm-avatar-spin { to { transform: rotate(1turn); } }
+@keyframes ppdm-status-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.55); }
+  70% { box-shadow: 0 0 0 5px rgba(52, 199, 89, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 199, 89, 0); }
+}
+@keyframes ppdm-donate-shine {
+  0%, 55% { transform: translateX(-160%) skewX(-18deg); }
+  85%, 100% { transform: translateX(420%) skewX(-18deg); }
+}
+@keyframes ppdm-heart-beat {
+  0%, 100% { transform: scale(1); }
+  12% { transform: scale(1.28); }
+  24% { transform: scale(1); }
+  36% { transform: scale(1.16); }
+  48% { transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #ppdm-panel .ppdm-avatar-ring,
+  #ppdm-panel .ppdm-avatar-status,
+  #ppdm-panel .ppdm-donate::after,
+  #ppdm-panel .ppdm-heart {
+    animation: none;
+  }
+}
+
+/* Logo wordmark is hardcoded black in the app's SVG */
+html.pikpak-dark .logo-svg .logo-text {
+  fill: #f2f4f8 !important;
+}
+
+/* ==========================================================================
+   Extra Element Plus controls (dialogs, settings, forms)
+   ========================================================================== */
+
+html.pikpak-dark .el-radio__inner,
+html.pikpak-dark .el-checkbox__inner {
+  background-color: #202226 !important;
+  border-color: #4a4d55 !important;
+}
+html.pikpak-dark .el-radio__input.is-checked .el-radio__inner,
+html.pikpak-dark .el-checkbox__input.is-checked .el-checkbox__inner,
+html.pikpak-dark .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  background-color: #306eff !important;
+  border-color: #306eff !important;
+}
+html.pikpak-dark .el-radio__inner::after { background-color: #ffffff !important; }
+html.pikpak-dark .el-checkbox__inner::after { border-color: #ffffff !important; }
+html.pikpak-dark .el-radio__label,
+html.pikpak-dark .el-checkbox__label {
+  color: #d7dbe2 !important;
+}
+html.pikpak-dark .el-switch__core {
+  background-color: #3a3d44 !important;
+  border-color: #3a3d44 !important;
+}
+html.pikpak-dark .el-switch.is-checked .el-switch__core {
+  background-color: #306eff !important;
+  border-color: #306eff !important;
+}
+html.pikpak-dark .el-tabs__item {
+  color: #aeb6c2 !important;
+}
+html.pikpak-dark .el-tabs__item.is-active,
+html.pikpak-dark .el-tabs__item:hover {
+  color: #f2f4f8 !important;
+}
+html.pikpak-dark .el-tabs__nav-wrap::after {
+  background-color: #2f3136 !important;
+}
+html.pikpak-dark .el-tabs__active-bar {
+  background-color: #306eff !important;
+}
+html.pikpak-dark .el-input-group__prepend,
+html.pikpak-dark .el-input-group__append {
+  background-color: #26282c !important;
+  border-color: #35373d !important;
+  color: #d7dbe2 !important;
+}
+html.pikpak-dark .el-table,
+html.pikpak-dark .el-table tr,
+html.pikpak-dark .el-table th.el-table__cell,
+html.pikpak-dark .el-table td.el-table__cell {
+  background-color: #1c1d20 !important;
+  border-color: #2f3136 !important;
+  color: #d7dbe2 !important;
+}
+html.pikpak-dark .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  background-color: #202226 !important;
+}
+html.pikpak-dark .el-table th.el-table__cell {
+  background-color: #232428 !important;
+  color: #aeb6c2 !important;
+}
+html.pikpak-dark .el-empty__description p {
+  color: #8a94a3 !important;
+}
+html.pikpak-dark .el-loading-mask {
+  background-color: rgba(21, 21, 23, 0.72) !important;
+}
+
+/* ==========================================================================
+   Menus, context menus, and popover panels
+   ========================================================================== */
+
+/* Header "Settings and more" dropdown */
+html.pikpak-dark .menu-popover .menu,
+html.pikpak-dark .menu-popover .menu li,
+html.pikpak-dark .menu-popover .menu a {
+  color: #e6e9ef !important;
+}
+html.pikpak-dark .menu-popover .menu li:hover {
+  background-color: #2f3136 !important;
+  color: #ffffff !important;
+}
+html.pikpak-dark .menu-popover .menu .line {
+  border-top-color: rgba(152, 162, 173, 0.3) !important;
+}
+html.pikpak-dark .menu-popover .menu .new-version .new {
+  background-color: rgba(255, 102, 59, 0.16) !important;
+  color: #ff8f6b !important;
+}
+
+/* Right-click context menu (file list / main area) */
+html.pikpak-dark .context-menu {
+  background: #232428 !important;
+  border-color: #35373d !important;
+  color: #f2f4f8 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55) !important;
+}
+html.pikpak-dark .context-menu li,
+html.pikpak-dark .context-menu a,
+html.pikpak-dark .context-menu span {
+  color: #e6e9ef !important;
+}
+html.pikpak-dark .context-menu li:hover {
+  background: #2f3136 !important;
+  color: #ffffff !important;
+}
+html.pikpak-dark .context-menu li:hover a,
+html.pikpak-dark .context-menu li:hover span {
+  color: #ffffff !important;
+}
+html.pikpak-dark .context-menu li.active {
+  background: #33353b !important;
+}
+html.pikpak-dark .context-menu li .line,
+html.pikpak-dark .context-menu .line {
+  background-color: #35373d !important;
+}
+
+/* Avatar popover: premium / free header banner */
+html.pikpak-dark .user-info.premium {
+  background: linear-gradient(93.6deg, #2b2518 6.61%, #37301f 102.6%) !important;
+}
+html.pikpak-dark .user-info:not(.premium) {
+  background: linear-gradient(92.41deg, #1b2733 6.75%, #1f2e3c 106.52%) !important;
+}
+html.pikpak-dark .user-info.premium .name,
+html.pikpak-dark .user-info.premium .badge {
+  color: #f0d9a8 !important;
+}
+html.pikpak-dark .user-info.premium .phone_email,
+html.pikpak-dark .user-info.premium .vip-expires {
+  color: rgba(240, 217, 168, 0.64) !important;
+}
+html.pikpak-dark .user-info.premium .divider {
+  background: rgba(240, 217, 168, 0.28) !important;
+}
+html.pikpak-dark .user-info:not(.premium) .name,
+html.pikpak-dark .user-info:not(.premium) .badge {
+  color: #cfe4f7 !important;
+}
+html.pikpak-dark .user-info:not(.premium) .phone_email,
+html.pikpak-dark .user-info:not(.premium) .vip-expires {
+  color: rgba(207, 228, 247, 0.64) !important;
+}
+html.pikpak-dark .user-info.sidebar {
+  background: transparent !important;
+}
+
+/* Search suggestions dropdown */
+html.pikpak-dark .search-extension {
+  background: #232428 !important;
+  border-color: #35373d !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+html.pikpak-dark .search-extension > div + div::before {
+  background-color: #35373d !important;
+}
+
+/* Share / group dialog panel */
+html.pikpak-dark .groups {
+  background-color: #1d1e22 !important;
+}
+
+/* Archive decompression dialog */
+html.pikpak-dark .decompression-dialog {
+  background-color: #1d1e22 !important;
+}
+html.pikpak-dark .decompression-dialog .el-progress-bar__outer {
+  background: #303238 !important;
+}
+
+/* Drag & drop feedback card */
+html.pikpak-dark .file-drag-feedback {
+  background: #232428 !important;
+  border-color: #35373d !important;
+  color: #f2f4f8 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Loading cards */
+html.pikpak-dark .pikpak-loading-container .content {
+  background: #1d1e22 !important;
+}
+
+/* Plain inputs */
+html.pikpak-dark .pp-input:active,
+html.pikpak-dark .pp-input:focus {
+  background: #202226 !important;
+  color: #f2f4f8 !important;
+}
+
+/* Ghost primary button */
+html.pikpak-dark .el-button--primary.ghost {
+  background: transparent !important;
+  border-color: #306eff !important;
+  color: #6f9dff !important;
+  box-shadow: none !important;
+}
+
+/* Onboarding tooltips */
+html.pikpak-dark .introjs-tooltip {
+  background-color: #232428 !important;
+  color: #e6e9ef !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55) !important;
+}
+html.pikpak-dark .introjs-tooltiptext,
+html.pikpak-dark .introjs-button {
+  color: #e6e9ef !important;
+}
+html.pikpak-dark .introjs-button {
+  background-color: #2f3136 !important;
+  border-color: #3c3f46 !important;
+  text-shadow: none !important;
+}
+
+/* Sidebar promo carousel cards (inline light gradients from the app) */
+html.pikpak-dark .carousel-activity {
+  background: linear-gradient(180deg, #1e2733 0%, #18202b 100%) !important;
+  border: 1px solid #2f3946 !important;
+  box-shadow: none !important;
+}
+html.pikpak-dark .carousel-activity .title {
+  color: #cfe4f7 !important;
+}
+html.pikpak-dark .carousel-activity .content {
+  color: #cfe4f7 !important;
+}
+
+html.pikpak-dark .carousel-activity .title,
+html.pikpak-dark .carousel-activity .title * {
+  color: #cfe4f7 !important;
+}
+
+/* Header "events" / announcement dropdown (information popover) */
+html.pikpak-dark {
+  --el-color-black: #e6e9ef !important;
+}
+html.pikpak-dark .information li,
+html.pikpak-dark .information li a,
+html.pikpak-dark .information li span {
+  color: #e6e9ef !important;
+}
+html.pikpak-dark .information li:hover {
+  background: #2f3136 !important;
+}
+html.pikpak-dark .information li:hover a,
+html.pikpak-dark .information li:hover span {
+  color: #ffffff !important;
+}
+html.pikpak-dark .information li.active {
+  background: #33353b !important;
+}
