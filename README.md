@@ -194,7 +194,7 @@ If this theme made your PikPak look better, a star on the repo or a small tip go
 
 ## License
 
-No license file is included yet, so all rights are reserved by the author. If you'd like to reuse or redistribute this work, open an issue on the repository first.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
 
