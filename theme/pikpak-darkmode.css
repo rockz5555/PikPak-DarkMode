@@ -341,9 +341,17 @@ html.pikpak-dark ::-webkit-scrollbar-button {
   pointer-events: none;
 }
 
-/* Never show the switcher inside player / file-manager windows */
+/* Never show the switcher inside player / file-manager / landing windows */
 html[data-pikpak-route^="#player"] #ppdm-toggle,
-html[data-pikpak-route^="#file-manager"] #ppdm-toggle {
+html[data-pikpak-route^="#file-manager"] #ppdm-toggle,
+html[data-pikpak-route^="#/landing"] #ppdm-toggle {
+  display: none !important;
+}
+
+/* Keep the switcher out of the way while a modal dialog is open.
+   The class is maintained by pikpak-darkmode.js because Element Plus leaves
+   hidden overlays in the DOM. */
+html.ppdm-modal-open #ppdm-toggle {
   display: none !important;
 }
 
@@ -969,4 +977,783 @@ html.pikpak-dark .information li:hover span {
 }
 html.pikpak-dark .information li.active {
   background: #33353b !important;
+}
+
+/* ==========================================================================
+   Magnet-link landing popup (#/landing)
+   --------------------------------------------------------------------------
+   PikPak opens external magnet links in a small frameless BrowserWindow. The
+   stock popup is a wide, light-only landing page squeezed into ~412px, so it
+   looks nothing like the main app. This section turns it into a compact,
+   theme-aware "cloud download" card with an inset hero, a glass resource pill
+   and a gradient primary action. Everything is scoped to the landing route so
+   the main window, player and file manager keep their normal layout.
+   ========================================================================== */
+
+html[data-pikpak-route^="#/landing"] {
+  /* Light theme */
+  --ppdm-landing-text: #101828;
+  --ppdm-landing-muted: #5f6b7a;
+  --ppdm-landing-surface: #ffffff;
+  --ppdm-landing-surface-2: #f7f9fc;
+  --ppdm-landing-border: rgba(16, 24, 40, 0.08);
+  --ppdm-landing-border-strong: rgba(16, 24, 40, 0.14);
+  --ppdm-landing-glass: rgba(255, 255, 255, 0.62);
+  --ppdm-landing-hover: rgba(16, 24, 40, 0.05);
+  --ppdm-landing-icon-bg: rgba(16, 24, 40, 0.045);
+  --ppdm-landing-scrollbar: rgba(16, 24, 40, 0.2);
+  --ppdm-landing-accent: #2f6bff;
+  --ppdm-landing-accent-2: #7a5cff;
+  --ppdm-landing-accent-soft: rgba(47, 107, 255, 0.09);
+  --ppdm-landing-accent-border: rgba(47, 107, 255, 0.2);
+  --ppdm-landing-hero: linear-gradient(135deg, #dfe8f8 0%, #e7e2f7 55%, #dce9f7 100%);
+  --ppdm-landing-shadow:
+    0 30px 70px -24px rgba(31, 52, 96, 0.4),
+    0 12px 28px -18px rgba(31, 52, 96, 0.3);
+  --ppdm-landing-sheet-shadow: 0 30px 80px -20px rgba(15, 24, 44, 0.5);
+  color-scheme: light;
+}
+
+html.pikpak-dark[data-pikpak-route^="#/landing"] {
+  /* Dark theme */
+  --ppdm-landing-text: #f3f5f9;
+  --ppdm-landing-muted: #99a3b2;
+  --ppdm-landing-surface: #15171c;
+  --ppdm-landing-surface-2: #191c22;
+  --ppdm-landing-border: rgba(255, 255, 255, 0.075);
+  --ppdm-landing-border-strong: rgba(255, 255, 255, 0.13);
+  --ppdm-landing-glass: rgba(255, 255, 255, 0.055);
+  --ppdm-landing-hover: rgba(255, 255, 255, 0.065);
+  --ppdm-landing-icon-bg: rgba(255, 255, 255, 0.06);
+  --ppdm-landing-scrollbar: rgba(255, 255, 255, 0.18);
+  --ppdm-landing-accent: #7ba3ff;
+  --ppdm-landing-accent-2: #a78bfa;
+  --ppdm-landing-accent-soft: rgba(104, 145, 255, 0.15);
+  --ppdm-landing-accent-border: rgba(104, 145, 255, 0.28);
+  --ppdm-landing-hero: linear-gradient(135deg, #17233f 0%, #32204a 55%, #162845 100%);
+  --ppdm-landing-shadow:
+    0 34px 80px -28px rgba(0, 0, 0, 0.9),
+    0 16px 36px -20px rgba(0, 0, 0, 0.8);
+  --ppdm-landing-sheet-shadow: 0 30px 90px -20px rgba(0, 0, 0, 0.95);
+  color-scheme: dark;
+}
+
+/* --- window backdrop + card shell ---------------------------------------- */
+
+html[data-pikpak-route^="#/landing"] {
+  background: transparent !important;
+}
+html[data-pikpak-route^="#/landing"] body {
+  background: transparent !important;
+  color: var(--ppdm-landing-text) !important;
+  overflow: hidden !important;
+}
+html[data-pikpak-route^="#/landing"] #app {
+  height: 100vh !important;
+  background: transparent !important;
+  color: var(--ppdm-landing-text) !important;
+}
+html[data-pikpak-route^="#/landing"] .box-shadow {
+  height: 100vh;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+}
+html[data-pikpak-route^="#/landing"] .drag-rect {
+  height: 100%;
+  border: 1px solid var(--ppdm-landing-border) !important;
+  border-radius: 26px !important;
+  background: var(--ppdm-landing-surface) !important;
+  box-shadow: var(--ppdm-landing-shadow) !important;
+  overflow: hidden !important;
+  transition: opacity 0.28s ease, filter 0.28s ease, transform 0.28s ease;
+}
+html[data-pikpak-route^="#/landing"] .landing-bg.extension {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100%;
+  background: transparent !important;
+  overflow: hidden !important;
+}
+html[data-pikpak-route^="#/landing"] .landing,
+html[data-pikpak-route^="#/landing"] .landing .content {
+  width: 100% !important;
+  height: 100%;
+  margin: 0 !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .main {
+  width: 100% !important;
+  max-width: none !important;
+  height: 100%;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  padding: 10px 10px 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  color: var(--ppdm-landing-text) !important;
+}
+
+/* --- hero / thumbnail ----------------------------------------------------- */
+
+html[data-pikpak-route^="#/landing"] .landing .thumbnail-wrap {
+  position: relative;
+  width: 100% !important;
+  flex: 1 1 auto !important;
+  min-height: 240px;
+  margin: 0 !important;
+  border-radius: 18px;
+  overflow: visible !important;
+  background: var(--ppdm-landing-hero) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 18px;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 88% 6%, rgba(126, 160, 255, 0.32), transparent 55%),
+    linear-gradient(180deg, rgba(6, 8, 14, 0.34) 0%, rgba(6, 8, 14, 0) 30%, rgba(6, 8, 14, 0.08) 58%, rgba(6, 8, 14, 0.66) 100%);
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail {
+  height: 100% !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail > .el-image,
+html[data-pikpak-route^="#/landing"] .landing .thumbnail .el-image,
+html[data-pikpak-route^="#/landing"] .landing .thumbnail__unready,
+html[data-pikpak-route^="#/landing"] .landing .thumbnail__blur {
+  width: 100% !important;
+  height: 100% !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail .el-image__inner {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail__error,
+html[data-pikpak-route^="#/landing"] .landing .thumbnail__placeholder,
+html[data-pikpak-route^="#/landing"] .landing .thumbnail__unready,
+html[data-pikpak-route^="#/landing"] .landing .thumbnail__sensitive {
+  position: relative;
+  background: var(--ppdm-landing-hero) !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail__error::after,
+html[data-pikpak-route^="#/landing"] .landing .thumbnail__placeholder::after,
+html[data-pikpak-route^="#/landing"] .landing .thumbnail__unready::after,
+html[data-pikpak-route^="#/landing"] .landing .thumbnail__sensitive::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 58px;
+  height: 58px;
+  transform: translate(-50%, -50%);
+  background: var(--ppdm-landing-text);
+  opacity: 0.16;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm1 2v2h2V6H5Zm12 0v2h2V6h-2ZM5 10v2h2v-2H5Zm12 0v2h2v-2h-2ZM5 14v2h2v-2H5Zm12 0v2h2v-2h-2ZM9 6v12h6V6H9Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h16a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Zm1 2v2h2V6H5Zm12 0v2h2V6h-2ZM5 10v2h2v-2H5Zm12 0v2h2v-2h-2ZM5 14v2h2v-2H5Zm12 0v2h2v-2h-2ZM9 6v12h6V6H9Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  pointer-events: none;
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail .info {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  top: auto !important;
+  z-index: 3;
+  height: auto !important;
+  min-height: 92px;
+  padding: 16px 16px 18px !important;
+  transform: none !important;
+  background: linear-gradient(180deg, rgba(5, 7, 12, 0) 0%, rgba(5, 7, 12, 0.78) 100%) !important;
+  color: #fff !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail .info > div {
+  align-items: center !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail .icon {
+  width: 34px !important;
+  height: 34px !important;
+  flex: 0 0 34px !important;
+  box-sizing: border-box;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(6px);
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail .icon .el-image {
+  width: 100% !important;
+  height: 100% !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail .icon .el-image__inner {
+  object-fit: contain !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail .icon + div {
+  margin-left: 12px !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail .name {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  letter-spacing: -0.01em;
+  color: #fff !important;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+}
+html[data-pikpak-route^="#/landing"] .landing .watermark {
+  z-index: 4 !important;
+  top: 12px !important;
+  left: 12px !important;
+  display: flex !important;
+  align-items: center;
+  padding: 0 9px 0 6px !important;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px !important;
+  background: rgba(8, 10, 16, 0.44) !important;
+  color: rgba(255, 255, 255, 0.86) !important;
+  font-size: 9.5px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.01em;
+  backdrop-filter: blur(10px) saturate(140%);
+}
+html[data-pikpak-route^="#/landing"] .landing .watermark::before {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  opacity: 0.8;
+}
+html[data-pikpak-route^="#/landing"] .close-landing-page {
+  display: none !important;
+}
+
+/* --- magnet resource pill ------------------------------------------------- */
+
+html[data-pikpak-route^="#/landing"] .landing .resource-link {
+  position: absolute !important;
+  left: 14px !important;
+  right: 14px !important;
+  bottom: -42px !important;
+  z-index: 5;
+  width: auto !important;
+  min-height: 40px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px;
+  margin: 0 !important;
+  padding: 0 6px 0 11px !important;
+  border: 1px solid var(--ppdm-landing-border) !important;
+  border-radius: 12px;
+  background: var(--ppdm-landing-glass) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+html[data-pikpak-route^="#/landing"] .landing .resource-link > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+html[data-pikpak-route^="#/landing"] .landing .resource-link .link-icon {
+  --size: 17px !important;
+  width: 17px !important;
+  height: 17px !important;
+  flex: 0 0 17px !important;
+  margin-right: 8px !important;
+  opacity: 0.7;
+}
+html[data-pikpak-route^="#/landing"] .landing .resource-link .link {
+  display: block !important;
+  max-width: 100% !important;
+  max-height: none !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  word-break: normal !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 10.5px !important;
+  line-height: 1.4 !important;
+  color: var(--ppdm-landing-muted) !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .resource-link > a.pp-link-button {
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  color: var(--ppdm-landing-muted) !important;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+html[data-pikpak-route^="#/landing"] .landing .resource-link > a.pp-link-button:hover {
+  background: var(--ppdm-landing-hover) !important;
+  color: var(--ppdm-landing-text) !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .resource-link > a.pp-link-button .pp-icon {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 18px !important;
+  --icon-color: currentColor !important;
+  --icon-color-hover: currentColor !important;
+}
+
+/* --- copy / operation block ---------------------------------------------- */
+
+html[data-pikpak-route^="#/landing"] .landing .operation {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  margin: 0 !important;
+  padding: 66px 14px 18px !important;
+  color: var(--ppdm-landing-text) !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .operation::before {
+  content: "CLOUD DOWNLOAD";
+  align-self: flex-start;
+  margin-bottom: 9px;
+  padding: 4px 8px;
+  border: 1px solid var(--ppdm-landing-accent-border);
+  border-radius: 999px;
+  background: var(--ppdm-landing-accent-soft);
+  color: var(--ppdm-landing-accent);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.15em;
+}
+html[data-pikpak-route^="#/landing"] .landing .operation .title {
+  position: static !important;
+  margin: 0 !important;
+  color: var(--ppdm-landing-text) !important;
+  font-size: 17px !important;
+  font-weight: 650 !important;
+  line-height: 1.4 !important;
+  letter-spacing: -0.02em;
+}
+html[data-pikpak-route^="#/landing"] .landing .operation .subtitle {
+  margin-top: 6px !important;
+  color: var(--ppdm-landing-muted) !important;
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .operation .btn-groups {
+  width: 100% !important;
+  flex-direction: column;
+  margin-top: 14px;
+}
+html[data-pikpak-route^="#/landing"] .landing .operation .btn__create-task {
+  position: relative;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 46px !important;
+  margin: 0 !important;
+  padding: 0 18px !important;
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #5b8dff 0%, #3a72ff 48%, #7c5cff 100%) !important;
+  box-shadow:
+    0 12px 26px -10px rgba(48, 110, 255, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 650 !important;
+  line-height: 46px !important;
+  letter-spacing: 0.01em;
+  text-align: center;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+html[data-pikpak-route^="#/landing"] .landing .operation .btn__create-task::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  bottom: -40%;
+  left: -70%;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.34), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.55s ease;
+  pointer-events: none;
+}
+html[data-pikpak-route^="#/landing"] .landing .operation .btn__create-task:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  box-shadow:
+    0 16px 30px -10px rgba(48, 110, 255, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .operation .btn__create-task:hover::after {
+  left: 130%;
+}
+html[data-pikpak-route^="#/landing"] .landing .operation .btn__create-task:active {
+  transform: translateY(0) scale(0.995);
+}
+html[data-pikpak-route^="#/landing"] .landing .operation .cloud-download-folder {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px;
+  max-width: none !important;
+  margin-top: 12px !important;
+  padding: 8px 10px 8px 12px !important;
+  border: 1px solid var(--ppdm-landing-border) !important;
+  border-radius: 11px;
+  background: var(--ppdm-landing-glass);
+  color: var(--ppdm-landing-muted) !important;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .cloud-download-folder > span:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+html[data-pikpak-route^="#/landing"] .landing .cloud-download-folder .folder-name {
+  position: relative;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 92px;
+  margin-left: 0 !important;
+  padding-left: 17px !important;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  background: none !important;
+  color: var(--ppdm-landing-text) !important;
+  font-weight: 600;
+}
+html[data-pikpak-route^="#/landing"] .landing .cloud-download-folder .folder-name::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 13px;
+  height: 13px;
+  transform: translateY(-50%);
+  background: var(--ppdm-landing-accent);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html[data-pikpak-route^="#/landing"] .landing .cloud-download-folder .modify {
+  flex: 0 0 auto;
+  margin-left: auto !important;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--ppdm-landing-accent-soft);
+  color: var(--ppdm-landing-accent) !important;
+  font-size: 10.5px !important;
+  font-weight: 650;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+html[data-pikpak-route^="#/landing"] .landing .cloud-download-folder .modify:hover {
+  background: var(--ppdm-landing-accent);
+  color: #fff !important;
+}
+
+/* --- injected close button ------------------------------------------------ */
+
+#ppdm-landing-close {
+  position: fixed;
+  top: 36px;
+  right: 36px;
+  z-index: 30;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(8, 10, 16, 0.42);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-app-region: no-drag;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+#ppdm-landing-close:hover {
+  background: rgba(8, 10, 16, 0.62);
+  transform: scale(1.06);
+}
+#ppdm-landing-close:active {
+  transform: scale(0.94);
+}
+#ppdm-landing-close:focus-visible {
+  outline: 2px solid #7ba3ff;
+  outline-offset: 2px;
+}
+
+/* --- modal state: dim the card, let the picker float --------------------- */
+
+html[data-pikpak-route^="#/landing"].ppdm-modal-open .drag-rect {
+  opacity: 0.32;
+  filter: blur(2px) saturate(0.8);
+  transform: scale(0.985);
+}
+
+/* ==========================================================================
+   Landing "Modify" folder picker
+   --------------------------------------------------------------------------
+   It shares the landing route, so it reuses the theme variables above and
+   feels like a natural second panel of the same card. It also stays inside
+   the small window: the dialog is capped to the viewport, the list scrolls
+   internally and the footer never gets pushed off-screen.
+   ========================================================================== */
+
+html[data-pikpak-route^="#/landing"] .el-overlay {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+html[data-pikpak-route^="#/landing"] .el-overlay-dialog {
+  padding: 0 !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page {
+  display: flex !important;
+  flex-direction: column;
+  width: 380px !important;
+  height: calc(100vh - 20px) !important;
+  max-height: calc(100vh - 20px) !important;
+  margin: 10px auto !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 1px solid var(--ppdm-landing-border) !important;
+  border-radius: 20px !important;
+  background: var(--ppdm-landing-surface) !important;
+  box-shadow: var(--ppdm-landing-sheet-shadow) !important;
+  color: var(--ppdm-landing-text) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__header {
+  display: none !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .mobile-dialog-header {
+  display: flex !important;
+  flex: 0 0 auto;
+  align-items: center;
+  height: 60px !important;
+  padding: 0 18px !important;
+  border-bottom: 1px solid var(--ppdm-landing-border) !important;
+  background: transparent !important;
+  line-height: normal !important;
+  text-align: left !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .mobile-dialog-header::before {
+  content: "Select Folder";
+  flex: 1 1 auto;
+  color: var(--ppdm-landing-text);
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .mobile-dialog-header a {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  height: 30px !important;
+  padding: 0 12px !important;
+  border: 1px solid var(--ppdm-landing-border);
+  border-radius: 999px;
+  background: var(--ppdm-landing-glass);
+  color: var(--ppdm-landing-muted) !important;
+  font-size: 12px !important;
+  font-weight: 600;
+  line-height: 30px !important;
+  text-decoration: none;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .mobile-dialog-header a:hover {
+  background: var(--ppdm-landing-hover);
+  color: var(--ppdm-landing-text) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__body {
+  flex: 1 1 auto !important;
+  min-height: 0;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer {
+  display: flex !important;
+  flex-direction: column;
+  height: calc(100vh - 20px - 80px - 60px - 8px) !important;
+  margin: 0 4px !important;
+  color: var(--ppdm-landing-text) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__navigator {
+  flex: 0 0 auto;
+  height: 38px !important;
+  padding: 0 !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__navigator ol li {
+  font-size: 12px !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__navigator .pp-link-button,
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer .small.pp-link-button {
+  display: inline-flex !important;
+  align-items: center;
+  height: 28px !important;
+  padding: 0 10px !important;
+  border: 1px solid var(--ppdm-landing-border);
+  border-radius: 999px;
+  background: var(--ppdm-landing-glass);
+  color: var(--ppdm-landing-muted) !important;
+  font-size: 11.5px !important;
+  line-height: 28px !important;
+  text-decoration: none;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__navigator .pp-link-button:hover,
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer .small.pp-link-button:hover {
+  background: var(--ppdm-landing-hover) !important;
+  color: var(--ppdm-landing-text) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .list-container {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 6px;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .list-container .el-scrollbar,
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .list-container .el-scrollbar__wrap {
+  height: 100% !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .list-container ul {
+  height: auto !important;
+  padding: 2px 0 8px !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-scrollbar__thumb {
+  background: var(--ppdm-landing-scrollbar) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__row {
+  height: 50px !important;
+  margin: 2px 0;
+  padding: 0 10px !important;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: var(--ppdm-landing-text) !important;
+  font-size: 13px !important;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__row:hover {
+  background: var(--ppdm-landing-hover) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__row.active {
+  border-color: var(--ppdm-landing-accent-border) !important;
+  background: var(--ppdm-landing-accent-soft) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__row > * {
+  margin: 0 7px !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__row .thumbnail {
+  --image-size: 30px;
+  box-sizing: border-box;
+  width: 30px !important;
+  height: 30px !important;
+  flex: 0 0 30px;
+  padding: 5px;
+  border-radius: 9px;
+  background: var(--ppdm-landing-icon-bg) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__row .thumbnail .el-image {
+  width: 100% !important;
+  height: 100% !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__row .thumbnail img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__row .folder-name {
+  align-items: center;
+  gap: 8px;
+  color: var(--ppdm-landing-text) !important;
+  font-weight: 550;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__row.active .folder-name {
+  color: var(--ppdm-landing-accent) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__row .folder-name[data-default-folder]::after {
+  content: attr(data-default-folder);
+  height: 18px;
+  padding: 0 8px;
+  border: 1px solid var(--ppdm-landing-border);
+  border-radius: 999px;
+  background: var(--ppdm-landing-glass);
+  color: var(--ppdm-landing-muted);
+  font-size: 10.5px;
+  line-height: 16px;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__footer {
+  flex: 0 0 80px !important;
+  display: flex !important;
+  align-items: center;
+  padding: 0 18px !important;
+  border-top: 1px solid var(--ppdm-landing-border) !important;
+  background: var(--ppdm-landing-surface-2) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__footer .footer {
+  width: 100%;
+  height: 100% !important;
+  gap: 10px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__footer .footer > * {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__footer .footer > div {
+  display: flex;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__footer .el-button {
+  width: 100% !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  margin: 0 !important;
+  border-radius: 12px !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+  line-height: 1 !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__footer .el-button.is-link {
+  border: 1px solid var(--ppdm-landing-border) !important;
+  background: var(--ppdm-landing-glass) !important;
+  color: var(--ppdm-landing-text) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__footer .el-button.is-link span {
+  margin-left: 0 !important;
+  color: var(--ppdm-landing-text) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__footer .el-button.is-link:hover {
+  background: var(--ppdm-landing-hover) !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__footer .el-button--primary:not(.is-link) {
+  border: 0 !important;
+  background: linear-gradient(135deg, #5b8dff 0%, #3a72ff 48%, #7c5cff 100%) !important;
+  box-shadow: 0 10px 22px -10px rgba(48, 110, 255, 0.6);
+  color: #fff !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__footer .el-button--primary:not(.is-link) span {
+  color: #fff !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__footer .el-button--primary:not(.is-link):hover {
+  filter: brightness(1.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-pikpak-route^="#/landing"] .drag-rect,
+  html[data-pikpak-route^="#/landing"] .landing .operation .btn__create-task,
+  html[data-pikpak-route^="#/landing"] .landing .operation .btn__create-task::after,
+  #ppdm-landing-close {
+    transition: none !important;
+  }
 }

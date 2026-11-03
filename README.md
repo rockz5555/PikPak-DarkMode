@@ -23,6 +23,7 @@ A drop-in dark theme for the **PikPak desktop app** — theme-aware controls and
 | ------------------------ | ------------------------------------------------------------------------------------ |
 | **Real theme switching** | Light, Dark, and System modes, remembered across launches.                           |
 | **Theme-aware panel**    | The switcher, author card, and donation button all adapt to the active theme.        |
+| **Themed landing**       | The magnet-link card and folder picker follow the same light/dark theme.             |
 | **Safe by design**       | Timestamped backups before every change and an idempotent installer you can re-run.  |
 | **One-command restore**  | `-Restore` removes the injection and the copied assets, leaving your backups intact. |
 | **Zero dependencies**    | Plain PowerShell plus one CSS file and one JS file. No build step, no runtime.       |
@@ -103,8 +104,9 @@ PikPak Dark Mode status
 | Light / Dark / System                             | Switches the active mode       |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd> | Toggles between light and dark |
 | <kbd>Esc</kbd>                                    | Closes the panel               |
+| <kbd>Esc</kbd> or close button (landing popup)     | Closes the landing window      |
 
-Your choice is stored in `localStorage` under `pikpak-theme` and restored on the next launch. The switcher hides itself on the player and file-manager routes so it never covers fullscreen content.
+Your choice is stored in `localStorage` under `pikpak-theme` and restored on the next launch. The switcher hides itself on the player and file-manager routes so it never covers fullscreen content, and while a modal dialog is open. PikPak's separate window for external magnet links (`#/landing`) follows the saved mode but uses a compact, card-style layout that matches the main app: an inset artwork hero, a glass magnet pill, a gradient primary action, and a themed "Modify" folder picker that always fits the narrow window. The popup window itself is transparent, so the card floats on a small inset margin instead of painting a full-window black or white backdrop, and the artwork falls back to a soft light gradient in light mode and a deep one in dark mode. That popup never shows the floating switcher; use its own close button or <kbd>Esc</kbd> instead.
 
 ## How it works
 
@@ -150,7 +152,8 @@ This removes the injection and the copied theme assets. Backups in `backups/` ar
 | Theme doesn't appear                    | Restart PikPak. If it still doesn't show, run `.\apply-darkmode.ps1 -Status`.                       |
 | Theme disappeared after an app update   | PikPak replaced `index.html`. Re-run the installer.                                                 |
 | Script won't run                        | Use `powershell -ExecutionPolicy Bypass -File .\apply-darkmode.ps1`.                                |
-| Switcher invisible                      | It hides on the player and file-manager routes by design, and can sit behind fullscreen video.      |
+| Switcher invisible                      | It hides on player/file-manager and magnet-link (`#/landing`) routes and open dialogs by design, and can sit behind fullscreen video. |
+| Magnet-link popup looks light           | The popup follows the saved mode. Switch the mode in the main window (or with Ctrl+Shift+D), then reopen the link. The popup has no floating switcher by design; use its close button or Esc. |
 | Avatar is a gradient "N"                | GitHub couldn't be reached; the fallback is intentional and retries on the next launch.             |
 
 ## Theme API

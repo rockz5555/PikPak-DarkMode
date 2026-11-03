@@ -14,10 +14,15 @@
   var AVATAR_URL = 'https://github.com/' + GITHUB_USER + '.png?size=96';
   var root = document.documentElement;
 
-  // PikPak opens playback in separate windows (#player-container,
-  // #player-controller, #file-manager). Leave those windows completely
-  // untouched: no dark class, no floating switcher.
-  var isPlayerWindow = /^#(?:player|file-manager)\b/.test(window.location.hash || '');
+  // PikPak opens playback and the file manager in separate windows
+  // (#player-container, #player-controller, #file-manager). Leave those
+  // windows completely untouched: no dark class, no floating switcher.
+  var isExcludedWindow = /^#(?:player|file-manager)\b/.test(window.location.hash || '');
+
+  // The magnet-link landing popup (#/landing) follows the saved theme so it
+  // matches the main window, but it never gets the floating switcher. It has
+  // its own dedicated skin and a close button instead.
+  var isLandingWindow = /^#\/landing(?:[\/?]|$)/.test(window.location.hash || '');
 
   var media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
@@ -43,7 +48,7 @@
 
   function applyMode(nextMode, persist) {
     mode = nextMode;
-    if (isPlayerWindow) return;
+    if (isExcludedWindow) return;
     var dark = resolve(mode);
     root.classList.toggle(DARK_CLASS, dark);
     root.setAttribute('data-pikpak-theme', dark ? 'dark' : 'light');
@@ -75,7 +80,7 @@
   };
 
   function ensureUI() {
-    if (isPlayerWindow || ui || !document.body) return;
+    if (isExcludedWindow || isLandingWindow || ui || !document.body) return;
     if (document.getElementById('ppdm-toggle')) { ui = document.getElementById('ppdm-toggle'); return; }
 
     ui = document.createElement('div');
@@ -157,22 +162,79 @@
     });
 
     document.addEventListener('click', closePanel);
+  }
 
-    var lastRoute = null;
-    function syncRoute() {
-      var route = location.hash || '#/';
-      if (route !== lastRoute) {
-        lastRoute = route;
-        root.setAttribute('data-pikpak-route', route);
-        closePanel();
-      }
+  /* ---------- route / modal state ---------- */
+
+  // Element Plus keeps its overlays in the DOM and hides them with
+  // display:none, so `:has(.el-overlay)` cannot be used to detect them: it
+  // would treat a hidden overlay as an open dialog. Poll for one that is
+  // really visible instead and mark the root element while it is open.
+  function isModalOpen() {
+    var overlays = document.querySelectorAll('.el-overlay');
+    for (var i = 0; i < overlays.length; i++) {
+      var el = overlays[i];
+      if (el.getAttribute('aria-hidden') === 'true') continue;
+      var inline = el.getAttribute('style') || '';
+      if (inline.indexOf('display: none') !== -1) continue;
+      var style = window.getComputedStyle(el);
+      if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') continue;
+      var rect = el.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) return true;
     }
+    return false;
+  }
+
+  var lastModalOpen = null;
+  function syncModal() {
+    var open = isModalOpen();
+    if (open === lastModalOpen) return;
+    lastModalOpen = open;
+    root.classList.toggle('ppdm-modal-open', open);
+    if (open) closePanel();
+  }
+
+  var lastRoute = null;
+  function syncRoute() {
+    var route = location.hash || '#/';
+    if (route !== lastRoute) {
+      lastRoute = route;
+      root.setAttribute('data-pikpak-route', route);
+      closePanel();
+    }
+  }
+
+  var watchersStarted = false;
+  function startWatchers() {
+    if (watchersStarted) return;
+    watchersStarted = true;
     syncRoute();
+    syncModal();
     window.addEventListener('hashchange', syncRoute);
     window.addEventListener('popstate', syncRoute);
     // Vue Router can navigate with pushState/replaceState, which fires no
-    // hashchange event; a light poll keeps the route attribute accurate.
-    setInterval(syncRoute, 1000);
+    // hashchange event; a light poll keeps the route attribute accurate and
+    // notices modal dialogs that open or close without a route change.
+    setInterval(function () { syncRoute(); syncModal(); }, 1000);
+  }
+
+  /* ---------- landing chrome ---------- */
+
+  function ensureLandingChrome() {
+    if (!isLandingWindow || !document.body) return;
+    if (document.getElementById('ppdm-landing-close')) return;
+    var btn = document.createElement('button');
+    btn.id = 'ppdm-landing-close';
+    btn.type = 'button';
+    btn.title = 'Close';
+    btn.setAttribute('aria-label', 'Close');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    btn.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      window.close();
+    });
+    document.body.appendChild(btn);
   }
 
   function syncUI() {
@@ -206,7 +268,11 @@
       ev.preventDefault();
       applyMode(resolve(mode) ? 'light' : 'dark');
     }
-    if (ev.key === 'Escape') closePanel();
+    if (ev.key === 'Escape') {
+      closePanel();
+      // Escape closes the landing popup, unless a picker/dialog is open.
+      if (isLandingWindow && !isModalOpen()) window.close();
+    }
   });
 
   /* ---------- system preference changes ---------- */
@@ -234,15 +300,20 @@
   function boot() {
     applyMode(mode, false);
     ensureUI();
+    ensureLandingChrome();
+    startWatchers();
     syncUI();
   }
 
   // The class is set by the inline boot snippet as early as possible; this
-  // re-applies it (in case that snippet was skipped) and builds the switcher.
+  // re-applies it (in case that snippet was skipped), builds the switcher and
+  // starts the route/modal watchers.
   applyMode(mode, false);
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       ensureUI();
+      ensureLandingChrome();
+      startWatchers();
       syncUI();
     });
   } else {
