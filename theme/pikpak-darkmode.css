@@ -945,6 +945,19 @@ html.pikpak-dark .search-extension > div + div::before {
   background-color: #35373d !important;
 }
 
+/* Search "Filter" section (SearchTags.vue ships light-only pills) */
+html.pikpak-dark .search-tags .title {
+  color: #aeb6c2 !important;
+}
+html.pikpak-dark .search-tags li {
+  background-color: #2a2c31 !important;
+  color: #e6e9ef !important;
+}
+html.pikpak-dark .search-tags li:hover {
+  background-color: #33353b !important;
+  color: #ffffff !important;
+}
+
 /* Share / group dialog panel */
 html.pikpak-dark .groups {
   background-color: #1d1e22 !important;
