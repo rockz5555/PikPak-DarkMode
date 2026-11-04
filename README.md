@@ -24,7 +24,7 @@ A drop-in dark theme for the **PikPak desktop app** — theme-aware controls and
 | **Real theme switching** | Light, Dark, and System modes, remembered across launches.                           |
 | **Theme-aware panel**    | The switcher, author card, and donation button all adapt to the active theme.        |
 | **Themed landing**       | The magnet-link card and folder picker follow the same light/dark theme.             |
-| **Themed dialogs**       | Cloud-download progress and completion popups match the active theme too.            |
+| **Themed dialogs**       | Cloud-download, completion, and external-player "Play Mode" popups match the theme.  |
 | **Safe by design**       | Timestamped backups before every change and an idempotent installer you can re-run.  |
 | **One-command restore**  | `-Restore` removes the injection and the copied assets, leaving your backups intact. |
 | **Zero dependencies**    | Plain PowerShell plus one CSS file and one JS file. No build step, no runtime.       |

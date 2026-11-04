@@ -275,6 +275,24 @@ html.pikpak-dark .speed-save-dialog .mobile-dialog-header {
   border-bottom-color: #2e3035 !important;
 }
 
+/* External-player dialog (OpenExternalPlayerDialog)
+   Opened from a video's right-click menu → "Use External Player". The row
+   labels hardcode black (.select-name), so they vanish on the dark dialog;
+   the footer bar also needs a softer, raised surface and muted caption. */
+html.pikpak-dark .external-player-dialog .select-name {
+  color: #f2f4f8 !important;
+}
+html.pikpak-dark .external-player-dialog .success-text {
+  color: #d7dbe2 !important;
+}
+html.pikpak-dark .external-player-dialog .controller-bar {
+  background: #26282c !important;
+  color: #aeb6c2 !important;
+}
+html.pikpak-dark .external-player-dialog .controller-bar__describe {
+  color: #aeb6c2 !important;
+}
+
 /* Menus / poppers */
 html.pikpak-dark .el-popper,
 html.pikpak-dark .el-dropdown-menu,
