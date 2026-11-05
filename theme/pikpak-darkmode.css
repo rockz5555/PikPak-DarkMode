@@ -102,6 +102,8 @@ html.pikpak-dark .file-explorer {
 
 /* Header */
 html.pikpak-dark .header-bar {
+  position: relative !important;
+  z-index: 20 !important;
   background: rgba(10, 10, 11, 0.72) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
   color: #f4f1ea !important;
@@ -2263,6 +2265,123 @@ html.pikpak-dark .file-drag-feedback {
   backdrop-filter: blur(24px) saturate(1.4);
   -webkit-backdrop-filter: blur(24px) saturate(1.4);
 }
+/* Search dropdown: graphite glass with a signal-orange edge. The header's
+   backdrop-filter creates a stacking context, so the header is lifted above
+   the explorer; otherwise this panel renders behind the file list. */
+html.pikpak-dark .search-extension {
+  max-height: calc(100vh - 78px) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  padding: 10px 12px 12px !important;
+  border-radius: 20px !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgba(255, 92, 53, 0.16), transparent 56%),
+    radial-gradient(100% 90% at 100% 0%, rgba(217, 178, 122, 0.1), transparent 62%),
+    rgba(18, 18, 20, 0.98) !important;
+  box-shadow:
+    0 32px 80px -28px rgba(0, 0, 0, 0.96),
+    0 0 0 1px rgba(255, 92, 53, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  scrollbar-width: thin;
+}
+html.pikpak-dark .search-extension > div + div::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.12),
+    transparent
+  ) !important;
+}
+
+html.pikpak-dark .search-history .title-wrap {
+  align-items: center;
+}
+html.pikpak-dark .search-history .title,
+html.pikpak-dark .search-tags .title {
+  padding: 10px 8px !important;
+  color: rgba(244, 241, 234, 0.46) !important;
+  font-family: "JetBrains Mono", "Cascadia Mono", Consolas, monospace !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+html.pikpak-dark .search-history .title-wrap .pp-link-button {
+  color: #ff8a63 !important;
+  font-family: "JetBrains Mono", "Cascadia Mono", Consolas, monospace !important;
+  font-size: 10.5px !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+html.pikpak-dark .search-history .title-wrap .pp-link-button:hover {
+  color: #ffab8f !important;
+}
+
+html.pikpak-dark .search-history ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+html.pikpak-dark .search-history li {
+  margin: 0 -6px;
+  padding: 0 6px;
+  border-radius: 10px;
+  transition: background 0.16s ease, color 0.16s ease;
+}
+html.pikpak-dark .search-history li:hover {
+  background: rgba(255, 92, 53, 0.11);
+}
+html.pikpak-dark .search-history .name {
+  color: rgba(244, 241, 234, 0.9);
+}
+html.pikpak-dark .search-history li:hover .name {
+  color: #ffffff;
+}
+html.pikpak-dark .search-history .clear .pp-icon {
+  --icon-color: rgba(244, 241, 234, 0.42) !important;
+  --icon-color-hover: #ff8a63 !important;
+}
+
+html.pikpak-dark .search-tags ul {
+  gap: 8px !important;
+}
+html.pikpak-dark .search-tags li {
+  background-color: rgba(255, 255, 255, 0.055) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease,
+    transform 0.16s ease;
+}
+html.pikpak-dark .search-tags li:hover {
+  background-color: rgba(255, 92, 53, 0.14) !important;
+  border-color: rgba(255, 92, 53, 0.36) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+html.pikpak-dark .search-share-code {
+  margin-top: 10px !important;
+  padding: 8px 6px 2px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+html.pikpak-dark .search-share-code .title {
+  color: rgba(244, 241, 234, 0.62) !important;
+  font-size: 12.5px !important;
+}
+html.pikpak-dark .search-share-code .share-code {
+  color: #ff8a63 !important;
+  font-family: "JetBrains Mono", "Cascadia Mono", Consolas, monospace !important;
+  font-size: 12px !important;
+}
+html.pikpak-dark .search-share-code .share-code:hover {
+  color: #ffab8f !important;
+}
+
 html.pikpak-dark .menu-popover .menu li:hover,
 html.pikpak-dark .context-menu li:hover,
 html.pikpak-dark .information li:hover {

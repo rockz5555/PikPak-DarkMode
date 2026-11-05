@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/preview.png" alt="PikPak Dark Mode — theme panel shown in light and dark mode" width="100%">
+<img src="docs/preview.png" alt="PikPak Dark Mode — the app shown in dark and light mode" width="100%">
 
 # PikPak Dark Mode
 
