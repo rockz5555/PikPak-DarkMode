@@ -44,10 +44,11 @@
   transform: translateY(8px) scale(0.98);
 }
 
-/* Never compete with fullscreen playback, the file manager, the magnet-link
-   popup, or a modal dialog. */
+/* Never compete with fullscreen playback, the landing page, or a modal
+   dialog. The main file-manager screen keeps the card so a pending update is
+   visible on launch. */
 html[data-pikpak-route^="#player"] #ppdm-update,
-html[data-pikpak-route^="#file-manager"] #ppdm-update,
+html[data-pikpak-route^="#/player"] #ppdm-update,
 html[data-pikpak-route^="#/landing"] #ppdm-update,
 html.ppdm-modal-open #ppdm-update {
   display: none !important;

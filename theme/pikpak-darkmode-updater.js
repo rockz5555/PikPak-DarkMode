@@ -8,7 +8,7 @@
  * next to PikPak's renderer.
  *
  * The panel is deliberately small and non-blocking: it never covers the app,
- * it hides on player / file-manager / landing routes, and it follows the
+ * it hides during fullscreen playback / on the landing route, and it follows the
  * active light or dark theme.
  *
  * Public API: window.PikPakUpdater
@@ -38,17 +38,12 @@
   var PENDING_KEY = 'ppdm-update-pending'; // written before install, read after reload
   var DISMISS_KEY = 'ppdm-update-dismissed';
 
-  var CHECK_EVERY = 6 * 60 * 60 * 1000;    // automatic re-check window
+  var CHECK_EVERY = 6 * 60 * 60 * 1000;    // throttle for programmatic checks
   var BOOT_DELAY = 5000;                   // let the app finish starting first
   var REQUEST_TIMEOUT = 15000;
   var DOWNLOAD_TIMEOUT = 45000;
   var AGENT_TIMEOUT = 2500;
   var MAX_NOTES = 3;
-
-  var hash = window.location.hash || '';
-  var isExcluded =
-    /^#(?:player|file-manager)\b/.test(hash) ||
-    /^#\/landing(?:[\/?]|$)/.test(hash);
 
   var ICONS = {
     update:
@@ -399,6 +394,7 @@
   var refs = {};
   var currentRemote = null;
   var currentPlan = null;
+  var dismissedVersion = '';               // per-window; never persisted
   var lastRestart = false;
   var busy = false;
   var checking = null;
@@ -463,7 +459,12 @@
   }
 
   function mount() {
-    if (isExcluded || refs.root || !document.body) return;
+    if (!document.body) return;
+    // The app can tear down body-level nodes on a route change. Drop a stale
+    // reference so the next render mounts a fresh card instead of updating a
+    // detached one.
+    if (refs.root && !document.body.contains(refs.root)) refs = {};
+    if (refs.root) return;
     refs.root = document.createElement('div');
     refs.root.id = 'ppdm-update';
     refs.root.setAttribute('data-state', 'idle');
@@ -742,8 +743,7 @@
         dispatch('skipped', { version: remote.version, skipped: remote.version });
         return null;
       }
-      var dismissed = '';
-      try { dismissed = window.sessionStorage.getItem(DISMISS_KEY) || ''; } catch (e) { dismissed = ''; }
+      var dismissed = dismissedVersion;
       if (dismissed === remote.version) {
         dispatch('available', { version: remote.version });
         return null;
@@ -968,9 +968,8 @@
   }
 
   function dismiss() {
-    if (currentRemote) {
-      try { window.sessionStorage.setItem(DISMISS_KEY, currentRemote.version); } catch (e) { /* ignore */ }
-    }
+    if (currentRemote) dismissedVersion = currentRemote.version;
+    try { window.sessionStorage.removeItem(DISMISS_KEY); } catch (e) { /* ignore */ }
     hide();
     dispatch('dismissed');
   }
@@ -1036,12 +1035,20 @@
   }
 
   function boot() {
-    if (isExcluded) return;
+    // Dismissal is deliberately in-memory: a previous "not now" only hides
+    // the card for this window. The app restores sessionStorage across
+    // launches, so clearing that key here is cleanup for older versions, not
+    // the suppression check.
+    dismissedVersion = '';
+    try { window.sessionStorage.removeItem(DISMISS_KEY); } catch (e) { /* ignore */ }
     mount();
     if (showPostUpdate()) return;
     dispatch('idle');
     setTimeout(function () {
-      check({ force: false, interactive: false });
+      // Check on every launch so a restart always surfaces a pending release,
+      // even if the last check happened minutes ago. CHECK_EVERY still throttles
+      // callers that do not pass force.
+      check({ force: true, interactive: false });
     }, BOOT_DELAY);
   }
 
@@ -1054,6 +1061,7 @@
     installed: installedInfo,
     state: readState,
     reset: function () {
+      dismissedVersion = '';
       try {
         window.localStorage.removeItem(STATE_KEY);
         window.localStorage.removeItem(PENDING_KEY);

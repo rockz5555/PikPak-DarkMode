@@ -60,13 +60,20 @@ hides the badge if no build can be identified.
 - Source: `https://raw.githubusercontent.com/rockz5555/PikPak-DarkMode/master/update/manifest.json`,
   with jsDelivr as a fallback mirror and `?v=<timestamp>` to defeat the 5-minute
   cache.
-- Cadence: once per 6 hours, 5 seconds after launch, so startup is never blocked.
-  `localStorage` holds `lastCheck`; a failed check never surfaces as an error
+- Cadence: on every launch, 5 seconds after the DOM is ready, so startup is never
+  blocked. The boot check forces a fetch; `check()` without `force` is throttled
+  to once per six hours for programmatic callers. `localStorage` holds
+  `lastCheck`; a failed check never surfaces as an error
   unless the user asked for it from the panel.
 - Comparison: semver-style, pre-release aware (`1.2.0-beta.1 < 1.2.0`). No
   version, no prompt.
 - Skipping: `skippedVersion` persists, so that release is never offered again —
   a strictly newer release is.
+- Dismissing: the close button/Esc holds the version in memory for the current
+  window, so a reload or the next launch offers it again. Use **Skip this
+  version** for a persistent opt-out.
+- The main file-manager screen keeps the card so it is visible on launch; only
+  fullscreen playback, the landing page, and an open PikPak dialog hide it.
 
 ## 3. The delta
 
@@ -145,8 +152,11 @@ interrupt PikPak's own UI. The user decides when to reload.
   transfer rate and ETA from a measured sliding window.
 - **Success** — the badge morphs to green and the check mark draws itself
   (`stroke-dashoffset`), then the card fades after a few seconds.
-- **Quiet by design** — hides on `#player`, `#file-manager`, `#/landing` and
-  while a PikPak modal is open; Escape dismisses it; it never takes focus.
+- **Quiet by design** — hides during fullscreen playback (`#/player`), on the
+  landing page (`#/landing`) and while a PikPak modal is open; the main
+  file-manager screen keeps it so a pending update is visible on launch.
+  Escape/the close button dismisses it until the next launch; it never takes
+  focus.
 - **Reduced motion** — every animation is disabled by
   `prefers-reduced-motion: reduce`.
 - **Ambient affordances** — a pulsing dot on the floating switcher, and a status

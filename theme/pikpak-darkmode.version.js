@@ -6,13 +6,13 @@
  * downloads the files whose SHA-256 differs.
  */
 window.PIKPAK_DARKMODE_VERSION = {
-  "version": "1.1.0",
+  "version": "1.1.1",
   "bootstrap": 3,
   "released": "2026-11-05",
   "files": {
     "pikpak-darkmode.css": { "sha256": "033d6ad59ce632b25952f33a94a68e8350c289e3ce08be1af6952edf15b4f2cb", "size": 71690 },
     "pikpak-darkmode.js": { "sha256": "7c0e17d38612597cd0c5074f16c8514f4c2ccffef3d28630fba3f8d3c85ad3b8", "size": 20405 },
-    "pikpak-darkmode-updater.css": { "sha256": "e263e6b88d4b7a1a2944df8024f362ef0287a97d17293dfdf768e819712204c3", "size": 16508 },
-    "pikpak-darkmode-updater.js": { "sha256": "4e5f2951b5fb38521cf995de38a4e1402bafadb09b1f15de058099873b79863c", "size": 39193 }
+    "pikpak-darkmode-updater.css": { "sha256": "08f54010c50555cf35a665c11b89811ca56296bc0da94200a97e9a4b2650a892", "size": 16569 },
+    "pikpak-darkmode-updater.js": { "sha256": "1d4af23a9bab13b7a3ac5a7e29408f6c91621d110ab6ef477b6a41ee1ad83c7d", "size": 39868 }
   }
 };

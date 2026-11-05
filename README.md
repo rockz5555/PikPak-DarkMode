@@ -149,7 +149,7 @@ Nothing else is touched. No system settings are changed, and no telemetry, analy
 
 ## Automatic updates
 
-The theme checks for a new release shortly after launch (at most every six hours) and shows a small card in the bottom-left corner when one exists:
+The theme checks for a new release shortly after every launch and shows a small card in the bottom-left corner when one exists:
 
 | Choice | What it does |
 | --- | --- |
@@ -159,7 +159,7 @@ The theme checks for a new release shortly after launch (at most every six hours
 
 Only files that actually changed are downloaded. The release and the installed theme each carry a SHA-256 for every asset, so a typical release pulls one or two small files instead of the whole theme — the card states the saving up front ("2 of 4 files · 38 KB instead of 96 KB"). Every download is hashed before it is staged, and the helper re-hashes it before it touches disk.
 
-The card names the theme it belongs to ("PikPak Dark Mode", with the update state and version chips underneath) and carries a small green shield chip naming the PikPak build it was last applied to. It follows the active light or dark theme, never blocks the app, and hides itself on the player, file manager, magnet-link popup, and while a PikPak dialog is open. <kbd>Esc</kbd> dismisses it for the session; *Skip this version* is the persistent choice. A pulsing dot on the floating switcher and a status row in the theme panel ("v1.1.0 · Up to date") keep the state visible without nagging.
+The card names the theme it belongs to ("PikPak Dark Mode", with the update state and version chips underneath) and carries a small green shield chip naming the PikPak build it was last applied to. It follows the active light or dark theme, never blocks the app, and hides itself during fullscreen playback, on the landing page, and while a PikPak dialog is open. <kbd>Esc</kbd> or the close button hides it until the next launch; *Skip this version* is the persistent choice. A pulsing dot on the floating switcher and a status row in the theme panel ("v1.1.0 · Up to date") keep the state visible without nagging.
 
 The theme panel shows the host build above that row — for example `PikPak 2.15.5.5917`, `Last patched 5 Nov 2026`, and a green **Tested** badge — so it is obvious which PikPak version the patch belongs to. The same build appears as a compact shield chip on the update card.
 
@@ -226,7 +226,7 @@ This removes the injection and the copied theme assets. Backups in `backups/` ar
 | Theme disappeared after an app update   | PikPak replaced `index.html`. Re-run the installer.                                                 |
 | Update card says the helper is offline  | Run `.\apply-darkmode.ps1` (it registers and restarts the helper) or sign out and back in.          |
 | Update fails with a checksum warning    | Nothing was changed. Retry once; if it repeats, re-run the installer.                               |
-| Update prompt never appears             | It checks at most every six hours. Open the theme panel and click the version row to check now.     |
+| Update prompt never appears             | It checks on every PikPak launch. A dismissed prompt returns on the next launch; **Skip this version** stays hidden until a newer release. You can also click the version row to check now. |
 | Script won't run                        | Use `powershell -ExecutionPolicy Bypass -File .\apply-darkmode.ps1`.                                |
 | Switcher invisible                      | It hides on player/file-manager and magnet-link (`#/landing`) routes and open dialogs by design, and can sit behind fullscreen video. |
 | Magnet-link popup looks light           | The popup follows the saved mode. Switch the mode in the main window (or with Ctrl+Shift+D), then reopen the link. The popup has no floating switcher by design; use its close button or Esc. |
