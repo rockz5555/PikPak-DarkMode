@@ -20,7 +20,7 @@
     Release version, for example 1.1.0.
 
 .PARAMETER Notes
-    Changelog lines shown in the update card (max 3 are displayed).
+    Changelog lines shown in the update card (all notes are displayed).
 
 .PARAMETER Bootstrap
     Loader revision written by apply-darkmode.ps1. Bump it when the injected

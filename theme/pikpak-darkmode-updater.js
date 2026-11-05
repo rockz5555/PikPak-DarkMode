@@ -43,7 +43,6 @@
   var REQUEST_TIMEOUT = 15000;
   var DOWNLOAD_TIMEOUT = 45000;
   var AGENT_TIMEOUT = 2500;
-  var MAX_NOTES = 3;
 
   var ICONS = {
     update:
@@ -607,17 +606,10 @@
     if (!refs.notes) return;
     refs.notes.style.display = '';
     refs.notes.innerHTML = '';
-    for (var i = 0; i < notes.length && i < MAX_NOTES; i++) {
+    for (var i = 0; i < notes.length; i++) {
       var li = document.createElement('li');
       li.textContent = String(notes[i]);
       refs.notes.appendChild(li);
-    }
-    if (notes.length > MAX_NOTES) {
-      var more = document.createElement('li');
-      more.className = 'ppdm-update-note-more';
-      more.textContent = '+' + (notes.length - MAX_NOTES) + ' more change' +
-        (notes.length - MAX_NOTES === 1 ? '' : 's');
-      refs.notes.appendChild(more);
     }
     if (!notes.length) refs.notes.style.display = 'none';
   }

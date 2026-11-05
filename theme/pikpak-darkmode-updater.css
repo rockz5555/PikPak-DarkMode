@@ -235,10 +235,14 @@ html.ppdm-modal-open #ppdm-update {
 #ppdm-update .ppdm-update-notes {
   list-style: none;
   margin: 10px 0 0;
-  padding: 0;
+  padding: 0 4px 0 0;
   display: flex;
   flex-direction: column;
   gap: 5px;
+  max-height: min(46vh, 360px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
 }
 #ppdm-update .ppdm-update-notes li {
   position: relative;
@@ -257,15 +261,6 @@ html.ppdm-modal-open #ppdm-update {
   border-radius: 50%;
   background: linear-gradient(135deg, #4f8bff, #8b5cf6);
 }
-#ppdm-update .ppdm-update-notes li.ppdm-update-note-more {
-  color: var(--ppdm-update-soft);
-  opacity: 1;
-}
-#ppdm-update .ppdm-update-notes li.ppdm-update-note-more::before {
-  background: var(--ppdm-update-soft);
-  opacity: 0.5;
-}
-
 /* Progress */
 #ppdm-update .ppdm-update-progress { margin-top: 12px; }
 #ppdm-update .ppdm-update-steps {
