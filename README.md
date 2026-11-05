@@ -25,9 +25,10 @@ A drop-in dark theme for the **PikPak desktop app** — theme-aware controls and
 | **Theme-aware panel**    | The switcher, author card, and donation button all adapt to the active theme.        |
 | **Themed landing**       | The magnet-link card and folder picker follow the same light/dark theme.             |
 | **Themed dialogs**       | Cloud-download, completion, and external-player "Play Mode" popups match the theme.  |
+| **In-app updates**       | A delta updater card: only changed files, with Apply, Apply and restart, or skip.    |
 | **Safe by design**       | Timestamped backups before every change and an idempotent installer you can re-run.  |
 | **One-command restore**  | `-Restore` removes the injection and the copied assets, leaving your backups intact. |
-| **Zero dependencies**    | Plain PowerShell plus one CSS file and one JS file. No build step, no runtime.       |
+| **Zero dependencies**    | Plain PowerShell plus a few CSS/JS files. No build step, no runtime.                 |
 
 ## Quick start
 
@@ -67,6 +68,7 @@ Run these from the folder that contains `apply-darkmode.ps1`.
 | Remove the theme                    | `.\apply-darkmode.ps1 -Restore`                                 |
 | Remove and relaunch PikPak          | `.\apply-darkmode.ps1 -Restore -Restart`                        |
 | Skip self-elevation                 | `.\apply-darkmode.ps1 -NoElevate`                               |
+| Skip the update helper              | `.\apply-darkmode.ps1 -NoAgent`                                 |
 | Bypass the execution policy         | `powershell -ExecutionPolicy Bypass -File .\apply-darkmode.ps1` |
 
 ### Parameters
@@ -78,6 +80,8 @@ Run these from the folder that contains `apply-darkmode.ps1`.
 | `-Restart`           | Switch | Force-closes and relaunches PikPak after applying or restoring.                                                                                             |
 | `-Restore`           | Switch | Removes the injected block and the copied theme assets. Backups are preserved.                                                                              |
 | `-NoElevate`         | Switch | Internal flag used by the self-elevation relaunch. Skips the UAC relaunch; useful when the current shell is already elevated.                               |
+| `-NoAgent`           | Switch | Skips the local update helper. Update checks still work, but the card cannot install anything.                                                               |
+| `-UpdateSource <url>` | String | Points the installed updater at another manifest base URL (for example the playground). Run again without it to return to GitHub.                            |
 
 ### Status output
 
@@ -105,6 +109,7 @@ PikPak Dark Mode status
 | Light / Dark / System                             | Switches the active mode       |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd> | Toggles between light and dark |
 | <kbd>Esc</kbd>                                    | Closes the panel               |
+| Version row (bottom of the panel)                  | Checks for updates and shows their state |
 | <kbd>Esc</kbd> or close button (landing popup)     | Closes the landing window      |
 
 Your choice is stored in `localStorage` under `pikpak-theme` and restored on the next launch. The switcher hides itself on the player and file-manager routes so it never covers fullscreen content, and while a modal dialog is open. PikPak's separate window for external magnet links (`#/landing`) follows the saved mode but uses a compact, card-style layout that matches the main app: an inset artwork hero, a glass magnet pill, a gradient primary action, and a themed "Modify" folder picker that always fits the narrow window. The popup window itself is transparent, so the card floats on a small inset margin instead of painting a full-window black or white backdrop, and the artwork falls back to a soft light gradient in light mode and a deep one in dark mode. That popup never shows the floating switcher; use its own close button or <kbd>Esc</kbd> instead.
@@ -113,7 +118,7 @@ Your choice is stored in `localStorage` under `pikpak-theme` and restored on the
 
 1. Locates the PikPak install by checking the Windows registry and common folders.
 2. Backs up `index.html` into `backups/`, with a matching version note.
-3. Copies `theme/pikpak-darkmode.css` and `theme/pikpak-darkmode.js` next to the app's renderer.
+3. Copies the theme assets next to the app's renderer: the stylesheet, the updater stylesheet, both scripts, and the installed-version manifest.
 4. Injects a small, clearly marked block into the app's `index.html`:
 
    ```html
@@ -123,12 +128,62 @@ Your choice is stored in `localStorage` under `pikpak-theme` and restored on the
    ```
 
 5. Verifies the change. If verification fails, the backup is restored automatically.
+6. Installs a small local update helper in `%LOCALAPPDATA%\PikPak-DarkMode` and registers it for the current user, so the in-app updater can install future releases without touching the protected install folder. Use `-NoAgent` to skip this.
 
-Nothing else is touched. No system settings are changed, and no telemetry, analytics, or account data is collected. The only external request is the optional GitHub avatar image used in the panel.
+Nothing else is touched. No system settings are changed, and no telemetry, analytics, or account data is collected. The only external requests are the GitHub avatar image in the panel and the release manifest check described below.
+
+## Automatic updates
+
+The theme checks for a new release shortly after launch (at most every six hours) and shows a small card in the bottom-left corner when one exists:
+
+| Choice | What it does |
+| --- | --- |
+| **Apply and restart** | Installs the release and relaunches PikPak, so the new theme is active immediately. |
+| **Apply** | Installs in the background and offers a *Reload now* button; PikPak keeps running. |
+| **Skip this version** | Silences that release. A newer release still prompts. |
+
+Only files that actually changed are downloaded. The release and the installed theme each carry a SHA-256 for every asset, so a typical release pulls one or two small files instead of the whole theme — the card states the saving up front ("2 of 4 files · 38 KB instead of 96 KB"). Every download is hashed before it is staged, and the helper re-hashes it before it touches disk.
+
+The card names the theme it belongs to ("PikPak Dark Mode", with the update state and version chips underneath), follows the active light or dark theme, never blocks the app, and hides itself on the player, file manager, magnet-link popup, and while a PikPak dialog is open. <kbd>Esc</kbd> dismisses it for the session; *Skip this version* is the persistent choice. A pulsing dot on the floating switcher and a status row in the theme panel ("v1.0.0 · Up to date") keep the state visible without nagging.
+
+The helper is a loopback-only process (`127.0.0.1:48179`) started by the installer. It is protected by a per-install token, only accepts `pikpak-darkmode*` `.css`/`.js` files inside the theme folder, keeps one timestamped backup per update, and replaces files through a temporary copy — a failed update leaves the previous theme intact. See [docs/updates.md](docs/updates.md) for the full protocol.
+
+Publishing a release takes one command:
+
+```powershell
+.\tools\build-update.ps1 -Version 1.1.0 -Notes "Themed the transfer list" "Faster first paint"
+```
+
+Commit `theme/` and `update/` and running apps pick it up on their next check.
+
+### Try it without publishing
+
+`tools/update-playground.ps1` serves a fake release on loopback and prints the two console lines that point the updater at it:
+
+```powershell
+.\tools\update-playground.ps1          # serves http://127.0.0.1:8787/
+```
+
+It copies the theme into `.playground/`, advertises the next version, appends one visible demo rule so there is a real one-file delta, starts the update helper if it is not running, and copies the snippet to the clipboard. Nothing in the repo or in PikPak changes until you click **Apply**:
+
+```js
+localStorage.setItem('ppdm-update-source','http://127.0.0.1:8787/');
+PikPakUpdater.check({force:true, interactive:true});
+```
+
+`PikPakUpdater.reset()` drops the override again, <kbd>Ctrl</kbd>+<kbd>C</kbd> stops the server, and `.playground/` is gitignored and disposable.
+
+If you would rather skip the console step, point the installed build at the playground once and just restart PikPak:
+
+```powershell
+.\apply-darkmode.ps1 -UpdateSource http://127.0.0.1:8787/
+```
+
+That records the source in the injected loader, so the card appears on its own five seconds after launch. Re-run `.\apply-darkmode.ps1` without the switch to go back to GitHub.
 
 ## After a PikPak update
 
-PikPak updates replace `index.html`, which removes the injection. Re-run the installer after each update:
+PikPak updates replace `index.html`, which removes the injection. The in-app updater keeps the theme assets current, but the loader block can only be written by the installer — re-run it after each PikPak update:
 
 ```powershell
 .\apply-darkmode.ps1 -Restart
@@ -152,6 +207,9 @@ This removes the injection and the copied theme assets. Backups in `backups/` ar
 | `expected UI file is missing`           | Confirm `resources\app\out\main-renderer\index.html` exists inside the folder you passed.           |
 | Theme doesn't appear                    | Restart PikPak. If it still doesn't show, run `.\apply-darkmode.ps1 -Status`.                       |
 | Theme disappeared after an app update   | PikPak replaced `index.html`. Re-run the installer.                                                 |
+| Update card says the helper is offline  | Run `.\apply-darkmode.ps1` (it registers and restarts the helper) or sign out and back in.          |
+| Update fails with a checksum warning    | Nothing was changed. Retry once; if it repeats, re-run the installer.                               |
+| Update prompt never appears             | It checks at most every six hours. Open the theme panel and click the version row to check now.     |
 | Script won't run                        | Use `powershell -ExecutionPolicy Bypass -File .\apply-darkmode.ps1`.                                |
 | Switcher invisible                      | It hides on player/file-manager and magnet-link (`#/landing`) routes and open dialogs by design, and can sit behind fullscreen video. |
 | Magnet-link popup looks light           | The popup follows the saved mode. Switch the mode in the main window (or with Ctrl+Shift+D), then reopen the link. The popup has no floating switcher by design; use its close button or Esc. |
@@ -169,17 +227,37 @@ The theme exposes a small API on `window.PikPakTheme`:
 | `PikPakTheme.light()` / `.dark()` / `.system()` | Shorthand setters                 |
 | `PikPakTheme.key`                               | The storage key (`pikpak-theme`)  |
 
+The updater adds a second API:
+
+| Call                                                   | Result                                        |
+| ------------------------------------------------------ | --------------------------------------------- |
+| `PikPakUpdater.check({ force: true, interactive: true })` | Checks now and shows the update card        |
+| `PikPakUpdater.apply()` / `.applyAndRestart()`         | Installs the pending delta                     |
+| `PikPakUpdater.skip()`                                 | Skips the offered version                      |
+| `PikPakUpdater.installed()`                            | `{ version, bootstrap, released, files }`      |
+| `PikPakUpdater.reset()`                                | Clears check state, skip marker, and overrides |
+
 ## Project layout
 
 ```text
 PikPak-DarkMode/
-├─ apply-darkmode.ps1      # installer, status, and restore
+├─ apply-darkmode.ps1        # installer, status, and restore
+├─ agent/
+│  └─ ppdm-update-agent.ps1  # loopback update helper (copied per user)
 ├─ theme/
-│  ├─ pikpak-darkmode.css  # all visual overrides
-│  └─ pikpak-darkmode.js   # switcher, persistence, panel
+│  ├─ pikpak-darkmode.css    # all visual overrides
+│  ├─ pikpak-darkmode.js     # switcher, persistence, panel
+│  ├─ pikpak-darkmode-updater.css
+│  ├─ pikpak-darkmode-updater.js   # update engine + card
+│  └─ pikpak-darkmode.version.js   # installed version manifest (generated)
+├─ tools/
+│  └─ build-update.ps1       # regenerates both manifests
+├─ update/
+│  └─ manifest.json          # published release manifest
 ├─ docs/
-│  └─ preview.png          # project preview
-└─ backups/                # generated: original index.html + version notes
+│  ├─ preview.png            # project preview
+│  └─ updates.md             # updater architecture
+└─ backups/                  # generated: original index.html + version notes
 ```
 
 ## Support

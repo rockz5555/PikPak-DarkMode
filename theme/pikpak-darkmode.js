@@ -89,7 +89,7 @@
     ui.setAttribute('tabindex', '0');
     ui.setAttribute('aria-label', 'Change theme');
     ui.title = 'Theme (Ctrl+Shift+D)';
-    ui.innerHTML = '<span class="ppdm-toggle-icon"></span>';
+    ui.innerHTML = '<span class="ppdm-toggle-icon"></span><span class="ppdm-update-dot" aria-hidden="true"></span>';
 
     panel = document.createElement('div');
     panel.id = 'ppdm-panel';
@@ -121,6 +121,11 @@
       '<a class="ppdm-donate" href="https://www.paypal.me/nizwer" target="_blank" rel="noopener noreferrer" title="Support this project via PayPal">' +
         ICONS.paypal + '<span class="ppdm-donate-label">Donate via PayPal</span>' +
       '</a>' +
+      '<button type="button" class="ppdm-version-row" data-tone="" title="Check for theme updates">' +
+        '<span class="ppdm-version-dot" aria-hidden="true"></span>' +
+        '<span class="ppdm-version-text">Theme</span>' +
+        '<span class="ppdm-version-status">Check for updates</span>' +
+      '</button>' +
       '<div class="ppdm-signature">Made with <span class="ppdm-heart">' + ICONS.heart + '</span> for the PikPak community</div>';
 
     ui.appendChild(panel);
@@ -144,6 +149,15 @@
       if (opt) {
         applyMode(opt.getAttribute('data-mode'));
         closePanel();
+        ev.stopPropagation();
+        return;
+      }
+      var versionRow = ev.target.closest ? ev.target.closest('.ppdm-version-row') : null;
+      if (versionRow) {
+        if (window.PikPakUpdater) {
+          window.PikPakUpdater.check({ force: true, interactive: true });
+          closePanel();
+        }
         ev.stopPropagation();
         return;
       }
@@ -252,6 +266,54 @@
     }
   }
 
+  /* ---------- version + update status ---------- */
+
+  function installedVersion() {
+    var manifest = window.PIKPAK_DARKMODE_VERSION;
+    if (manifest && manifest.version) return String(manifest.version);
+    return '';
+  }
+
+  // The updater owns detection; this row only mirrors the state it reports so
+  // the panel stays useful (and honest) even when the updater is unavailable.
+  function syncUpdateRow(detail) {
+    var host = panel || document.getElementById('ppdm-panel');
+    if (!host) return;
+    var row = host.querySelector('.ppdm-version-row');
+    if (!row) return;
+
+    var version = installedVersion();
+    var text = row.querySelector('.ppdm-version-text');
+    var status = row.querySelector('.ppdm-version-status');
+    if (text) text.textContent = version ? 'v' + version : 'Theme';
+
+    var state = detail && detail.state ? detail.state : 'idle';
+    var available = detail && detail.available ? detail.available : '';
+    var tone = '';
+    var label = 'Check for updates';
+
+    if (state === 'checking') { label = 'Checking...'; tone = 'busy'; }
+    else if (state === 'available' || state === 'downloading' || state === 'verifying' || state === 'installing') {
+      label = available ? 'v' + available + ' available' : 'Update available';
+      tone = 'update';
+    } else if (state === 'success' || state === 'restarting') { label = 'Updated'; tone = 'ok'; }
+    else if (state === 'uptodate') { label = 'Up to date'; tone = 'ok'; }
+    else if (state === 'skipped') { label = 'Skipped' + (detail.skipped ? ' v' + detail.skipped : ''); tone = 'muted'; }
+    else if (state === 'error') { label = 'Check failed'; tone = 'warn'; }
+
+    if (status) status.textContent = label;
+    row.setAttribute('data-tone', tone);
+
+    if (ui) {
+      ui.classList.toggle('has-update', tone === 'update');
+      ui.classList.toggle('is-checking', tone === 'busy');
+    }
+  }
+
+  window.addEventListener('ppdm-update-state', function (ev) {
+    syncUpdateRow(ev.detail);
+  });
+
   function togglePanel() {
     if (!ui) return;
     ui.classList.toggle('is-open');
@@ -303,6 +365,7 @@
     ensureLandingChrome();
     startWatchers();
     syncUI();
+    syncUpdateRow(null);
   }
 
   // The class is set by the inline boot snippet as early as possible; this
@@ -315,6 +378,7 @@
       ensureLandingChrome();
       startWatchers();
       syncUI();
+      syncUpdateRow(null);
     });
   } else {
     boot();

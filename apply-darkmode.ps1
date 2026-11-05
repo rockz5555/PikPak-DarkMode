@@ -28,6 +28,15 @@
 .PARAMETER NoElevate
     Internal flag used by the self-elevation relaunch.
 
+.PARAMETER NoAgent
+    Skips the local update helper. In-app update checks still work, but the
+    update card cannot install anything.
+
+.PARAMETER UpdateSource
+    Points the installed updater at another manifest base URL, for example the
+    local playground (http://127.0.0.1:8787/). Run the installer again without
+    this parameter to go back to GitHub.
+
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File .\apply-darkmode.ps1
 
@@ -43,7 +52,9 @@ param(
     [switch]$Restore,
     [switch]$Restart,
     [switch]$Status,
-    [switch]$NoElevate
+    [switch]$NoElevate,
+    [switch]$NoAgent,
+    [string]$UpdateSource
 )
 
 $ErrorActionPreference = 'Stop'
@@ -55,6 +66,23 @@ $AssetName    = 'pikpak-darkmode'
 $StartMarker  = '<!-- PIKPAK-DARKMODE:START'
 $EndMarker    = '<!-- PIKPAK-DARKMODE:END -->'
 $MarkerRegex  = '(?s)\s*<!-- PIKPAK-DARKMODE:START.*?<!-- PIKPAK-DARKMODE:END -->\s*'
+
+# Local update helper (loopback only) - see agent/ppdm-update-agent.ps1
+$AgentSource      = Join-Path $ScriptDir 'agent\ppdm-update-agent.ps1'
+$AgentHome        = Join-Path $env:LOCALAPPDATA 'PikPak-DarkMode'
+if (-not $env:LOCALAPPDATA) { $AgentHome = Join-Path $env:APPDATA 'PikPak-DarkMode' }
+$AgentConfigPath  = Join-Path $AgentHome 'agent.json'
+$AgentPort        = 48179
+$AgentRunKey      = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Run'
+$AgentRunName     = 'PikPakDarkModeAgent'
+
+if ($UpdateSource) {
+    if ($UpdateSource -notmatch '^https?://') {
+        Write-Host '-UpdateSource must be an http(s) base URL.' -ForegroundColor Red
+        exit 1
+    }
+    if (-not $UpdateSource.EndsWith('/')) { $UpdateSource = $UpdateSource + '/' }
+}
 
 function Test-IsAdmin {
     $identity  = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -142,6 +170,86 @@ function Restart-PikPak {
     }
 }
 
+function Get-ThemeVersion([string]$Dir) {
+    $file = Join-Path (Join-Path $Dir $AssetName) 'pikpak-darkmode.version.js'
+    if (-not (Test-Path -LiteralPath $file)) { return '' }
+    try {
+        $text = [System.IO.File]::ReadAllText($file)
+        $match = [regex]::Match($text, '"version"\s*:\s*"([^"]+)"')
+        if ($match.Success) { return $match.Groups[1].Value }
+    } catch { }
+    return ''
+}
+
+function Test-AgentAlive {
+    try {
+        $probe = Invoke-WebRequest -Uri ('http://127.0.0.1:{0}/health' -f $AgentPort) -UseBasicParsing -TimeoutSec 2
+        return ($probe.StatusCode -eq 200)
+    } catch {
+        return $false
+    }
+}
+
+function Install-UpdateAgent {
+    if (-not (Test-Path -LiteralPath $AgentSource)) {
+        Write-Host 'Update helper script not found; in-app updates stay disabled.' -ForegroundColor Yellow
+        return $null
+    }
+
+    New-Item -ItemType Directory -Force -Path $AgentHome | Out-Null
+    $agentPath = Join-Path $AgentHome 'ppdm-update-agent.ps1'
+    Copy-Item -LiteralPath $AgentSource -Destination $agentPath -Force
+
+    # Reuse the existing token so a helper that is already running keeps working.
+    $token = ''
+    if (Test-Path -LiteralPath $AgentConfigPath) {
+        try {
+            $existing = Get-Content -LiteralPath $AgentConfigPath -Raw | ConvertFrom-Json
+            $token = [string]$existing.token
+        } catch { $token = '' }
+    }
+    if (-not $token) {
+        $token = -join (1..32 | ForEach-Object { '{0:x}' -f (Get-Random -Maximum 16) })
+    }
+
+    $config = [ordered]@{
+        port       = $AgentPort
+        token      = $token
+        themeDir   = $assetDir
+        installDir = $InstallDir
+        exe        = (Join-Path $InstallDir 'PikPak.exe')
+        agent      = '1.0.0'
+    }
+    ($config | ConvertTo-Json -Depth 4) | Set-Content -LiteralPath $AgentConfigPath -Encoding UTF8
+
+    $psExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+    if (-not (Test-Path -LiteralPath $psExe)) { $psExe = (Get-Process -Id $PID).Path }
+    $launch = '"{0}" -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "{1}"' -f $psExe, $agentPath
+    try {
+        Set-ItemProperty -Path $AgentRunKey -Name $AgentRunName -Value $launch
+    } catch {
+        Write-Host 'Could not register the update helper for this user.' -ForegroundColor Yellow
+    }
+
+    $running = Test-AgentAlive
+    if (-not $running) {
+        try {
+            Start-Process -FilePath $psExe `
+                -ArgumentList ('-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "{0}"' -f $agentPath) `
+                -WindowStyle Hidden
+            Start-Sleep -Milliseconds 900
+            $running = Test-AgentAlive
+        } catch { }
+    }
+
+    return [pscustomobject]@{
+        Port    = $AgentPort
+        Token   = $token
+        Running = $running
+        Path    = $agentPath
+    }
+}
+
 # --------------------------------------------------------------------------
 # Locate the app
 # --------------------------------------------------------------------------
@@ -182,6 +290,13 @@ if ($Status) {
     } else {
         Write-Host '  Theme          : not applied' -ForegroundColor Yellow
     }
+    Write-Host "  Theme version  : $(Get-ThemeVersion $MainRenderer)"
+    if (Test-Path -LiteralPath $AgentConfigPath) {
+        if (Test-AgentAlive) { Write-Host '  Update helper  : running' -ForegroundColor Green }
+        else { Write-Host '  Update helper  : stopped' -ForegroundColor Yellow }
+    } else {
+        Write-Host '  Update helper  : not installed' -ForegroundColor Yellow
+    }
     Write-Host "  Backup folder  : $BackupDir"
     Write-Host ''
     exit 0
@@ -197,6 +312,8 @@ if (-not (Test-IsAdmin) -and -not $NoElevate) {
     if ($InstallDir) { $arguments += " -InstallDir `"$InstallDir`"" }
     if ($Restore)    { $arguments += ' -Restore' }
     if ($Restart)    { $arguments += ' -Restart' }
+    if ($NoAgent)    { $arguments += ' -NoAgent' }
+    if ($UpdateSource) { $arguments += " -UpdateSource `"$UpdateSource`"" }
 
     Write-Host 'Administrator rights are required to modify the PikPak installation.' -ForegroundColor Yellow
     Write-Host 'Relaunching with elevation...' -ForegroundColor Yellow
@@ -215,6 +332,24 @@ if (-not (Test-IsAdmin) -and -not $NoElevate) {
 # --------------------------------------------------------------------------
 
 if ($Restore) {
+    # Stop and unregister the local update helper first.
+    if (Test-Path -LiteralPath $AgentConfigPath) {
+        try {
+            $agentCfg = Get-Content -LiteralPath $AgentConfigPath -Raw | ConvertFrom-Json
+            if ($agentCfg.pid) {
+                $agentProc = Get-CimInstance Win32_Process -Filter ('ProcessId={0}' -f [int]$agentCfg.pid) -ErrorAction SilentlyContinue
+                if ($agentProc -and ($agentProc.CommandLine -like '*ppdm-update-agent.ps1*')) {
+                    Stop-Process -Id ([int]$agentCfg.pid) -Force -ErrorAction SilentlyContinue
+                }
+            }
+        } catch { }
+        Remove-ItemProperty -Path $AgentRunKey -Name $AgentRunName -ErrorAction SilentlyContinue
+        Remove-Item -LiteralPath $AgentConfigPath -Force -ErrorAction SilentlyContinue
+        Remove-Item -LiteralPath (Join-Path $AgentHome 'ppdm-update-agent.ps1') -Force -ErrorAction SilentlyContinue
+        Remove-Item -LiteralPath (Join-Path $AgentHome 'staging') -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Host 'Update helper stopped and unregistered.' -ForegroundColor Green
+    }
+
     $text = [System.IO.File]::ReadAllText($IndexPath)
     if ($text.Contains($StartMarker)) {
         New-Item -ItemType Directory -Force -Path $BackupDir | Out-Null
@@ -252,11 +387,17 @@ if (-not (Test-Path -LiteralPath $ThemeSource)) {
     exit 1
 }
 
-$cssSource = Join-Path $ThemeSource 'pikpak-darkmode.css'
-$jsSource  = Join-Path $ThemeSource 'pikpak-darkmode.js'
-foreach ($file in @($cssSource, $jsSource)) {
-    if (-not (Test-Path -LiteralPath $file)) {
-        Write-Host "Missing theme asset: $file" -ForegroundColor Red
+$ThemeFiles = @(
+    'pikpak-darkmode.css',
+    'pikpak-darkmode.js',
+    'pikpak-darkmode-updater.css',
+    'pikpak-darkmode-updater.js',
+    'pikpak-darkmode.version.js'
+)
+foreach ($name in $ThemeFiles) {
+    $path = Join-Path $ThemeSource $name
+    if (-not (Test-Path -LiteralPath $path)) {
+        Write-Host "Missing theme asset: $path" -ForegroundColor Red
         exit 1
     }
 }
@@ -283,17 +424,38 @@ Write-Host "Backup created: $backupPath" -ForegroundColor DarkGray
 # Copy assets next to the app's index.html
 $assetDir = Join-Path $MainRenderer $AssetName
 New-Item -ItemType Directory -Force -Path $assetDir | Out-Null
-Copy-Item -LiteralPath $cssSource -Destination (Join-Path $assetDir 'pikpak-darkmode.css') -Force
-Copy-Item -LiteralPath $jsSource  -Destination (Join-Path $assetDir 'pikpak-darkmode.js')  -Force
+foreach ($name in $ThemeFiles) {
+    Copy-Item -LiteralPath (Join-Path $ThemeSource $name) -Destination (Join-Path $assetDir $name) -Force
+}
+
+# Register the local update helper so the card can install deltas without a
+# UAC prompt for every release. Skipped with -NoAgent.
+$AgentInfo = $null
+if (-not $NoAgent) {
+    $AgentInfo = Install-UpdateAgent
+}
+$AgentPortValue  = if ($AgentInfo) { $AgentInfo.Port } else { $AgentPort }
+$AgentTokenValue = if ($AgentInfo) { $AgentInfo.Token } else { '' }
+$AgentInject     = ''
+if ($AgentTokenValue) {
+    $AgentInject = 'window.__PPDM_AGENT__={port:' + $AgentPortValue + ',token:"' + $AgentTokenValue + '"};'
+}
+$SourceInject    = ''
+if ($UpdateSource) {
+    $SourceInject = 'try{localStorage.setItem("ppdm-update-source","' + $UpdateSource + '");}catch(e){}'
+}
 
 # Build the injected block
-$block = @'
+$block = @"
 <!-- PIKPAK-DARKMODE:START - managed by apply-darkmode.ps1, do not edit -->
 <link rel="stylesheet" href="./pikpak-darkmode/pikpak-darkmode.css">
-<script id="ppdm-boot">(function(){try{var r=document.documentElement,h=location.hash||'';r.setAttribute('data-pikpak-route',h||'#/');if(/^#(?:player|file-manager)\b/.test(h))return;var m=localStorage.getItem('pikpak-theme')||'system';var d=m==='dark'||(m!=='light'&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)r.classList.add('pikpak-dark');r.setAttribute('data-pikpak-theme-mode',m);}catch(e){}})();</script>
+<link rel="stylesheet" href="./pikpak-darkmode/pikpak-darkmode-updater.css">
+<script id="ppdm-boot">(function(){try{var r=document.documentElement,h=location.hash||'';r.setAttribute('data-pikpak-route',h||'#/');$AgentInject $SourceInject if(/^#(?:player|file-manager)\b/.test(h))return;var m=localStorage.getItem('pikpak-theme')||'system';var d=m==='dark'||(m!=='light'&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)r.classList.add('pikpak-dark');r.setAttribute('data-pikpak-theme-mode',m);}catch(e){}})();</script>
+<script src="./pikpak-darkmode/pikpak-darkmode.version.js"></script>
 <script src="./pikpak-darkmode/pikpak-darkmode.js" defer></script>
+<script src="./pikpak-darkmode/pikpak-darkmode-updater.js" defer></script>
 <!-- PIKPAK-DARKMODE:END -->
-'@
+"@
 
 $original = [System.IO.File]::ReadAllText($IndexPath)
 $cleaned  = [regex]::Replace($original, $MarkerRegex, '')
@@ -322,6 +484,19 @@ Write-Host 'PikPak Dark Mode applied.' -ForegroundColor Green
 Write-Host "  App version : $Version"
 Write-Host "  Patched     : $IndexPath"
 Write-Host "  Backup      : $backupPath"
+Write-Host "  Theme ver.  : $(Get-ThemeVersion $MainRenderer)"
+if ($AgentInfo) {
+    if ($AgentInfo.Running) {
+        Write-Host '  Update helper: running (in-app updates enabled)' -ForegroundColor Cyan
+    } else {
+        Write-Host '  Update helper: registered, starts with your next sign-in' -ForegroundColor Yellow
+    }
+} else {
+    Write-Host '  Update helper: disabled (-NoAgent)' -ForegroundColor Yellow
+}
+if ($UpdateSource) {
+    Write-Host "  Update source: $UpdateSource (test source; re-run without -UpdateSource to clear)" -ForegroundColor Yellow
+}
 Write-Host ''
 Write-Host 'Open PikPak and use the round button at the bottom-right, or press Ctrl+Shift+D.' -ForegroundColor Cyan
 Write-Host 'The chosen mode (Light / Dark / System) is remembered between launches.' -ForegroundColor Cyan
