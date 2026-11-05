@@ -5,87 +5,112 @@
  * This file is injected into resources/app/out/main-renderer/index.html by
  * apply-darkmode.ps1. It styles the app through its own tokens/classes and
  * does not modify PikPak's bundled JavaScript.
+ *
+ * Visual language: the LOOPDROP "graphite sleeve" — warm graphite surfaces,
+ * signal orange, poster/serif/mono type and frosted glass. Fonts load from
+ * Google Fonts when available; every stack falls back to a local face.
  */
+
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap");
 
 html.pikpak-dark {
   color-scheme: dark !important;
 
-  /* App tokens */
-  --color-primary-text: #f2f4f8 !important;
-  --color-secondary-text: #aeb6c2 !important;
-  --color-tertiary-text: #8a94a3 !important;
-  --color-hover: #2a2c31 !important;
-  --color-active: #33353b !important;
-  --text-normal-color: #f2f4f8 !important;
-  --container-bg: #151517 !important;
-  --menu-bg-color: #232428 !important;
-  --sidebar-bg-color: #18191c !important;
+  /* App tokens — LOOPDROP graphite sleeve */
+  --color-primary-text: #f4f1ea !important;
+  --color-secondary-text: rgba(244, 241, 234, 0.72) !important;
+  --color-tertiary-text: rgba(244, 241, 234, 0.5) !important;
+  --color-hover: rgba(255, 255, 255, 0.07) !important;
+  --color-active: rgba(255, 92, 53, 0.16) !important;
+  --text-normal-color: #f4f1ea !important;
+  --container-bg: #0a0a0b !important;
+  --menu-bg-color: #131315 !important;
+  --sidebar-bg-color: #0d0d0f !important;
 
   /* Element Plus tokens */
-  --el-bg-color: #1c1d20 !important;
-  --el-bg-color-page: #131316 !important;
-  --el-bg-color-overlay: #232428 !important;
-  --el-text-color-primary: #f2f4f8 !important;
-  --el-text-color-regular: #d7dbe2 !important;
-  --el-text-color-secondary: #aeb6c2 !important;
-  --el-text-color-placeholder: #7d8794 !important;
-  --el-text-color-disabled: #5c6470 !important;
-  --el-border-color: #35373d !important;
-  --el-border-color-light: #2c2e33 !important;
-  --el-border-color-lighter: #26282c !important;
-  --el-border-color-extra-light: #222327 !important;
-  --el-border-color-dark: #3c3f46 !important;
-  --el-border-color-darker: #454951 !important;
-  --el-fill-color: #2a2c31 !important;
-  --el-fill-color-light: #24262a !important;
-  --el-fill-color-lighter: #202226 !important;
-  --el-fill-color-extra-light: #1d1f22 !important;
-  --el-fill-color-dark: #303238 !important;
-  --el-fill-color-darker: #36393f !important;
-  --el-fill-color-blank: #1c1d20 !important;
-  --el-mask-color: rgba(10, 10, 12, 0.75) !important;
-  --el-mask-color-extra-light: rgba(10, 10, 12, 0.3) !important;
-  --el-disabled-bg-color: #24262a !important;
-  --el-box-shadow: 0 12px 32px 4px rgba(0, 0, 0, 0.36), 0 8px 20px rgba(0, 0, 0, 0.45) !important;
-  --el-box-shadow-light: 0 0 12px rgba(0, 0, 0, 0.5) !important;
-  --el-box-shadow-lighter: 0 0 6px rgba(0, 0, 0, 0.5) !important;
-  --el-box-shadow-dark: 0 16px 48px 16px rgba(0, 0, 0, 0.36), 0 12px 32px rgba(0, 0, 0, 0.45), 0 8px 16px -8px rgba(0, 0, 0, 0.5) !important;
-  --el-color-primary-light-3: #5a8dff !important;
-  --el-color-primary-light-5: #7ba5ff !important;
-  --el-color-primary-light-7: #9cbdff !important;
-  --el-color-primary-light-8: #adc9ff !important;
-  --el-color-primary-light-9: #202b3f !important;
-  --el-color-primary-dark-2: #2456cc !important;
-  --el-color-success-light-9: #17372f !important;
-  --el-color-warning-light-9: #3a2c17 !important;
-  --el-color-danger-light-9: #3d1e15 !important;
-  --el-color-error-light-9: #3d1e15 !important;
-  --el-color-info-light-9: #26282c !important;
-  --el-color-danger: #ff7a52 !important;
-  --el-color-error: #ff7a52 !important;
+  --el-bg-color: #101012 !important;
+  --el-bg-color-page: #0a0a0b !important;
+  --el-bg-color-overlay: #141416 !important;
+  --el-text-color-primary: #f4f1ea !important;
+  --el-text-color-regular: rgba(244, 241, 234, 0.84) !important;
+  --el-text-color-secondary: rgba(244, 241, 234, 0.66) !important;
+  --el-text-color-placeholder: rgba(244, 241, 234, 0.4) !important;
+  --el-text-color-disabled: rgba(244, 241, 234, 0.28) !important;
+  --el-border-color: rgba(255, 255, 255, 0.14) !important;
+  --el-border-color-light: rgba(255, 255, 255, 0.1) !important;
+  --el-border-color-lighter: rgba(255, 255, 255, 0.08) !important;
+  --el-border-color-extra-light: rgba(255, 255, 255, 0.06) !important;
+  --el-border-color-dark: rgba(255, 255, 255, 0.18) !important;
+  --el-border-color-darker: rgba(255, 255, 255, 0.22) !important;
+  --el-fill-color: #1b1b1e !important;
+  --el-fill-color-light: #17171a !important;
+  --el-fill-color-lighter: #141416 !important;
+  --el-fill-color-extra-light: #111113 !important;
+  --el-fill-color-dark: #202024 !important;
+  --el-fill-color-darker: #26262b !important;
+  --el-fill-color-blank: #101012 !important;
+  --el-mask-color: rgba(6, 6, 7, 0.78) !important;
+  --el-mask-color-extra-light: rgba(6, 6, 7, 0.32) !important;
+  --el-disabled-bg-color: #17171a !important;
+  --el-box-shadow: 0 24px 60px -18px rgba(0, 0, 0, 0.9), 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+  --el-box-shadow-light: 0 12px 34px -12px rgba(0, 0, 0, 0.8) !important;
+  --el-box-shadow-lighter: 0 8px 22px -10px rgba(0, 0, 0, 0.7) !important;
+  --el-box-shadow-dark: 0 40px 100px -24px rgba(0, 0, 0, 0.95), 0 16px 40px rgba(0, 0, 0, 0.55) !important;
+  --el-border-radius-base: 12px !important;
+  --el-color-primary: #ff5c35 !important;
+  --el-color-primary-light-3: #ff7a57 !important;
+  --el-color-primary-light-5: #ff9a7d !important;
+  --el-color-primary-light-7: #ffb8a3 !important;
+  --el-color-primary-light-8: #ffc7b6 !important;
+  --el-color-primary-light-9: #2a1610 !important;
+  --el-color-primary-dark-2: #c9411f !important;
   --el-color-success: #54cfad !important;
+  --el-color-success-light-9: #12241f !important;
+  --el-color-warning: #d9b27a !important;
+  --el-color-warning-light-9: #2a2113 !important;
+  --el-color-danger: #e2685c !important;
+  --el-color-danger-light-9: #2a1512 !important;
+  --el-color-error: #e2685c !important;
+  --el-color-error-light-9: #2a1512 !important;
+  --el-color-info: #8f8a80 !important;
+  --el-color-info-light-9: #1b1b1e !important;
 }
 
-/* Base surfaces */
-html.pikpak-dark body,
+/* Base surfaces — a warm graphite canvas with a soft signal-orange aurora */
+html.pikpak-dark body {
+  background:
+    var(--ppdm-l-noise),
+    radial-gradient(70% 48% at 14% -4%, rgba(255, 92, 53, 0.14), transparent 60%),
+    radial-gradient(56% 42% at 94% 6%, rgba(244, 241, 234, 0.07), transparent 64%),
+    radial-gradient(90% 64% at 50% 108%, rgba(255, 92, 53, 0.06), transparent 68%),
+    #0a0a0b !important;
+  background-size: 140px 140px, auto, auto, auto, auto !important;
+  background-attachment: fixed !important;
+  color: #f4f1ea !important;
+  font-family: "Manrope", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 html.pikpak-dark #app,
 html.pikpak-dark .layout,
 html.pikpak-dark .main,
 html.pikpak-dark .container,
 html.pikpak-dark .file-explorer {
-  background-color: #151517 !important;
-  color: #f2f4f8 !important;
+  background-color: transparent !important;
+  color: #f4f1ea !important;
 }
 
 /* Header */
 html.pikpak-dark .header-bar {
-  background-color: #1b1c1f !important;
-  border-bottom: 1px solid #2a2c31 !important;
-  color: #f2f4f8 !important;
+  background: rgba(10, 10, 11, 0.72) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #f4f1ea !important;
+  backdrop-filter: blur(20px) saturate(1.35);
+  -webkit-backdrop-filter: blur(20px) saturate(1.35);
 }
 html.pikpak-dark .header-bar .pp-link-button,
 html.pikpak-dark .header-bar .pp-link-button:visited {
-  color: #d7dbe2 !important;
+  color: rgba(244, 241, 234, 0.82) !important;
 }
 html.pikpak-dark .header-bar .pp-link-button:hover {
   color: #ffffff !important;
@@ -93,31 +118,37 @@ html.pikpak-dark .header-bar .pp-link-button:hover {
 
 /* Sidebar */
 html.pikpak-dark .sidebar {
-  background-color: #141518 !important;
-  color: #d7dbe2 !important;
+  background: rgba(10, 10, 11, 0.55) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: rgba(244, 241, 234, 0.84) !important;
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
 }
 /* The sidebar nav ships with a hardcoded light hover (#ebebf0). */
 html.pikpak-dark .nav a:hover,
 html.pikpak-dark .nav a .hover {
-  background: #2a2c31 !important;
+  background: rgba(255, 255, 255, 0.07) !important;
 }
 
 /* Search / toolbar */
 html.pikpak-dark .search-form {
-  background-color: #26282c !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  border-radius: 14px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 html.pikpak-dark .search-input {
-  color: #f2f4f8 !important;
+  color: #f4f1ea !important;
 }
 html.pikpak-dark .information-icon {
-  background-color: #2a2c31 !important;
+  background-color: rgba(255, 255, 255, 0.07) !important;
 }
 html.pikpak-dark .thumbnail {
-  background-color: #25272b !important;
+  background-color: rgba(255, 255, 255, 0.045) !important;
 }
 html.pikpak-dark .grid-operation .checkbox-wrap,
 html.pikpak-dark .grid-operation .pp-link-button {
-  background-color: #2a2c31 !important;
+  background-color: rgba(255, 255, 255, 0.07) !important;
 }
 
 /* File thumbnails / folders */
@@ -125,21 +156,21 @@ html.pikpak-dark .blur,
 html.pikpak-dark .thumbnail .blur,
 html.pikpak-dark .file-cover .blur,
 html.pikpak-dark .file-cover.flex-center .blur {
-  background-color: #25272b !important;
+  background-color: rgba(255, 255, 255, 0.045) !important;
 }
 html.pikpak-dark .folder-cover,
 html.pikpak-dark .folder-cover .cover {
-  background-color: #25272b !important;
+  background-color: rgba(255, 255, 255, 0.045) !important;
 }
 html.pikpak-dark .folder-cover .cover::before {
-  background: linear-gradient(180deg, rgba(21, 21, 23, 0) 0%, rgba(21, 21, 23, 0.6) 100%) !important;
+  background: linear-gradient(180deg, rgba(10, 10, 11, 0) 0%, rgba(10, 10, 11, 0.66) 100%) !important;
 }
 html.pikpak-dark .placeholder {
-  background-color: #25272b !important;
+  background-color: rgba(255, 255, 255, 0.045) !important;
 }
 html.pikpak-dark .error {
-  background-color: #25272b !important;
-  color: #8a94a3 !important;
+  background-color: rgba(255, 255, 255, 0.045) !important;
+  color: rgba(244, 241, 234, 0.5) !important;
 }
 html.pikpak-dark .grid.folder.row {
   background-color: transparent !important;
@@ -147,20 +178,27 @@ html.pikpak-dark .grid.folder.row {
 /* Grid items ship with a hardcoded light hover (#f2f3f4); folders are
    transparent already, so only restyle the rest. */
 html.pikpak-dark .file-explorer .row.grid:hover:not(.folder):not(.selected):not(.highlight) {
-  background: #2a2c31 !important;
+  background: rgba(255, 255, 255, 0.055) !important;
+}
+html.pikpak-dark .file-explorer .row.grid.selected,
+html.pikpak-dark .file-explorer .row.grid.highlight {
+  background: linear-gradient(90deg, rgba(255, 92, 53, 0.2), rgba(255, 92, 53, 0.06)) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 92, 53, 0.34) !important;
 }
 
 /* Transfer panel */
 html.pikpak-dark .transfer {
-  background-color: #1b1c1f !important;
-  color: #f2f4f8 !important;
-  border-top: 1px solid #2a2c31 !important;
+  background: rgba(10, 10, 11, 0.82) !important;
+  color: #f4f1ea !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(18px) saturate(1.3);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
 }
 html.pikpak-dark .transfer-content {
-  background-color: #1b1c1f !important;
+  background-color: transparent !important;
 }
 html.pikpak-dark .transfer .pp-link-button {
-  color: #d7dbe2 !important;
+  color: rgba(244, 241, 234, 0.78) !important;
 }
 html.pikpak-dark .transfer .pp-link-button:hover {
   color: #ffffff !important;
@@ -168,17 +206,17 @@ html.pikpak-dark .transfer .pp-link-button:hover {
 
 /* Storage / progress */
 html.pikpak-dark .disk-usage .progress {
-  background-color: #303238 !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
 }
 html.pikpak-dark .disk-usage .progress-bar {
-  background-color: #306eff !important;
+  background: linear-gradient(90deg, #ff7a57, #ff5c35 62%, #c9411f) !important;
 }
 html.pikpak-dark .disk-usage .progress-bar.premium {
-  background-color: #d1ae6a !important;
+  background: linear-gradient(90deg, #f0d9a8, #d9b27a) !important;
 }
 html.pikpak-dark .disk-usage .icon-info {
-  background-color: #8a94a3 !important;
-  color: #aeb6c2 !important;
+  background-color: rgba(244, 241, 234, 0.6) !important;
+  color: rgba(244, 241, 234, 0.72) !important;
 }
 html.pikpak-dark .mobile-app,
 html.pikpak-dark .browser-extension,
@@ -369,8 +407,9 @@ html.pikpak-dark ::-webkit-scrollbar-button {
 
 #ppdm-toggle {
   position: fixed;
-  right: 18px;
-  bottom: 104px;
+  top: 19px;
+  right: 4px;
+  bottom: auto;
   z-index: 2147483000;
   width: 38px;
   height: 38px;
@@ -409,17 +448,11 @@ html[data-pikpak-route^="#/landing"] #ppdm-toggle {
   display: none !important;
 }
 
-/* Keep the switcher out of the way while a modal dialog is open.
-   The class is maintained by pikpak-darkmode.js because Element Plus leaves
-   hidden overlays in the DOM. */
-html.ppdm-modal-open #ppdm-toggle {
-  display: none !important;
-}
-
 #ppdm-panel {
   position: absolute;
   right: 0;
-  bottom: 48px;
+  top: calc(100% + 24px);
+  bottom: auto;
   width: 248px;
   padding: 8px;
   border-radius: 12px;
@@ -2119,4 +2152,738 @@ html.pikpak-dark #ppdm-panel .ppdm-version-dot { background: #5c6470; }
     animation: none;
   }
   #ppdm-panel .ppdm-compat:hover::after { opacity: 0; }
+}
+
+/* ==========================================================================
+   LOOPDROP reskin — graphite sleeve + signal orange
+   --------------------------------------------------------------------------
+   The deck aesthetic: warm graphite, a signal-orange accent, poster / serif /
+   mono typography, frosted glass controls and a soft aurora wash. Tokens are
+   namespaced --ppdm-l-* so they never collide with PikPak's own variables.
+   ========================================================================== */
+
+:root {
+  --ppdm-l-bg: #0a0a0b;
+  --ppdm-l-bg-soft: #101012;
+  --ppdm-l-ink: #f4f1ea;
+  --ppdm-l-muted: rgba(244, 241, 234, 0.72);
+  --ppdm-l-faint: rgba(244, 241, 234, 0.5);
+  --ppdm-l-line: rgba(255, 255, 255, 0.085);
+  --ppdm-l-line-strong: rgba(255, 255, 255, 0.16);
+  --ppdm-l-accent: #ff5c35;
+  --ppdm-l-accent-soft: #ff7a57;
+  --ppdm-l-accent-deep: #c9411f;
+  --ppdm-l-amber: #d9b27a;
+  --ppdm-l-rose: #e2685c;
+  --ppdm-l-glass: rgba(255, 255, 255, 0.06);
+  --ppdm-l-grad: linear-gradient(102deg, #ff7a57 0%, #ff5c35 58%, #c9411f 100%);
+  --ppdm-l-glow: 0 0 0 1px rgba(255, 92, 53, 0.16), 0 24px 80px -30px rgba(255, 92, 53, 0.3);
+  --ppdm-l-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.16'/%3E%3C/svg%3E");
+  --ppdm-l-font-poster: "Anton", "Arial Narrow", Impact, sans-serif;
+  --ppdm-l-font-body: "Manrope", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --ppdm-l-font-mono: "JetBrains Mono", "Cascadia Mono", Consolas, monospace;
+  --ppdm-l-font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --ppdm-l-ease: cubic-bezier(0.22, 0.8, 0.28, 1);
+  --ppdm-l-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- app chrome: glass, rounded, warm ------------------------------------ */
+
+html.pikpak-dark ::selection {
+  background: rgba(255, 92, 53, 0.32);
+  color: #fff;
+}
+html.pikpak-dark ::-webkit-scrollbar-thumb,
+html.pikpak-dark::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 92, 53, 0.52) !important;
+  border-color: #0d0d0f !important;
+}
+html.pikpak-dark ::-webkit-scrollbar-thumb:hover,
+html.pikpak-dark::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 122, 87, 0.82) !important;
+}
+html.pikpak-dark ::-webkit-scrollbar-thumb:active,
+html.pikpak-dark::-webkit-scrollbar-thumb:active {
+  background-color: rgba(255, 154, 125, 0.95) !important;
+}
+html.pikpak-dark ::-webkit-scrollbar-track,
+html.pikpak-dark::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+html.pikpak-dark .el-radio__input.is-checked .el-radio__inner,
+html.pikpak-dark .el-checkbox__input.is-checked .el-checkbox__inner,
+html.pikpak-dark .el-checkbox__input.is-indeterminate .el-checkbox__inner,
+html.pikpak-dark .el-switch.is-checked .el-switch__core {
+  background-color: #ff5c35 !important;
+  border-color: #ff5c35 !important;
+}
+html.pikpak-dark .el-tabs__active-bar {
+  background-color: #ff5c35 !important;
+}
+html.pikpak-dark .el-button--primary {
+  --el-button-bg-color: #ff5c35;
+  --el-button-border-color: #ff5c35;
+  --el-button-hover-bg-color: #ff7a57;
+  --el-button-hover-border-color: #ff7a57;
+  --el-button-active-bg-color: #c9411f;
+  --el-button-active-border-color: #c9411f;
+}
+html.pikpak-dark .el-button--primary.ghost {
+  border-color: #ff5c35 !important;
+  color: #ff8a63 !important;
+  box-shadow: none !important;
+}
+html.pikpak-dark .el-input__wrapper.is-focus,
+html.pikpak-dark .el-textarea__inner:focus {
+  box-shadow: 0 0 0 1px #ff5c35 inset !important;
+}
+html.pikpak-dark .el-dialog,
+html.pikpak-dark .el-message-box,
+html.pikpak-dark .el-drawer {
+  background: linear-gradient(168deg, rgba(24, 24, 27, 0.99), rgba(10, 10, 11, 0.99)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 44px 110px -34px rgba(0, 0, 0, 0.96), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  color: #f4f1ea !important;
+}
+html.pikpak-dark .el-overlay {
+  background-color: rgba(6, 6, 7, 0.78) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+html.pikpak-dark .context-menu,
+html.pikpak-dark .menu-popover .menu,
+html.pikpak-dark .search-extension,
+html.pikpak-dark .file-drag-feedback {
+  background: rgba(18, 18, 20, 0.97) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 28px 70px -24px rgba(0, 0, 0, 0.95) !important;
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+}
+html.pikpak-dark .menu-popover .menu li:hover,
+html.pikpak-dark .context-menu li:hover,
+html.pikpak-dark .information li:hover {
+  background: rgba(255, 92, 53, 0.12) !important;
+  color: #ffffff !important;
+}
+html.pikpak-dark .context-menu li:hover a,
+html.pikpak-dark .context-menu li:hover span,
+html.pikpak-dark .information li:hover a,
+html.pikpak-dark .information li:hover span {
+  color: #ffffff !important;
+}
+html.pikpak-dark .context-menu li.active,
+html.pikpak-dark .information li.active {
+  background: rgba(255, 92, 53, 0.18) !important;
+}
+
+/* --- floating switcher: a tiny graphite vinyl orb ------------------------ */
+
+#ppdm-toggle {
+  width: 26px;
+  height: 26px;
+  color: #c9411f;
+  background: radial-gradient(circle at 32% 26%, #ffffff, #f4f1ea 44%, #e4ddcf 100%);
+  border: 1px solid rgba(18, 16, 13, 0.14);
+  box-shadow: 0 16px 36px -14px rgba(24, 18, 14, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  isolation: isolate;
+  transition: box-shadow 0.24s ease, border-color 0.2s ease, background 0.2s ease;
+}
+/* Never transform the orb itself: the panel is its child, and scaling the
+   container on hover/:active moves the panel under the pointer mid-click, so
+   the click lands on the panel background and only toggles the panel. */
+#ppdm-toggle:hover,
+#ppdm-toggle:active {
+  transform: none;
+}
+#ppdm-toggle .ppdm-toggle-icon {
+  transition: transform 0.2s var(--ppdm-l-ease);
+}
+#ppdm-toggle:not(.is-open):hover .ppdm-toggle-icon {
+  transform: scale(1.12);
+}
+#ppdm-toggle:active .ppdm-toggle-icon {
+  transform: scale(0.9);
+}
+#ppdm-toggle::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(255, 92, 53, 0), rgba(255, 92, 53, 0.6), rgba(217, 178, 122, 0.28), rgba(255, 92, 53, 0));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px));
+  z-index: -1;
+  pointer-events: none;
+  animation: ppdm-l-orbit 9s linear infinite;
+}
+#ppdm-toggle:not(.is-open):hover {
+  color: #ff5c35;
+  border-color: rgba(255, 92, 53, 0.48);
+  box-shadow: 0 20px 44px -14px rgba(255, 92, 53, 0.5), inset 0 1px 0 #ffffff;
+}
+
+html.pikpak-dark #ppdm-toggle {
+  color: #ff8a63;
+  background: radial-gradient(circle at 32% 26%, #2d2d30, #121214 58%, #08080a 100%);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 18px 40px -14px rgba(0, 0, 0, 0.95),
+    0 0 26px -8px rgba(255, 92, 53, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+html.pikpak-dark #ppdm-toggle:hover {
+  border-color: rgba(255, 92, 53, 0.52);
+  box-shadow:
+    0 22px 46px -14px rgba(0, 0, 0, 0.95),
+    0 0 36px -6px rgba(255, 92, 53, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+html.pikpak-dark #ppdm-toggle .ppdm-update-dot { border-color: #0a0a0b; }
+
+/* --- theme panel: a frosted sleeve card ---------------------------------- */
+
+#ppdm-panel {
+  width: 306px;
+  top: calc(100% + 24px);
+  bottom: auto;
+  padding: 14px;
+  border-radius: 22px;
+  border: 1px solid rgba(18, 16, 13, 0.12);
+  background:
+    var(--ppdm-l-noise),
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 92, 53, 0.13), transparent 58%),
+    linear-gradient(168deg, #f7f4ec, #ece5d8);
+  background-size: 140px 140px, auto, auto;
+  box-shadow:
+    0 36px 84px -30px rgba(24, 18, 14, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  color: #12100d;
+  font-family: var(--ppdm-l-font-body);
+  gap: 3px;
+}
+html.pikpak-dark #ppdm-panel {
+  border-color: rgba(255, 255, 255, 0.12);
+  background:
+    var(--ppdm-l-noise),
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 92, 53, 0.2), transparent 58%),
+    linear-gradient(168deg, rgba(26, 26, 29, 0.985), rgba(9, 9, 11, 0.995));
+  background-size: 140px 140px, auto, auto;
+  box-shadow:
+    0 40px 96px -32px rgba(0, 0, 0, 0.96),
+    0 0 0 1px rgba(255, 92, 53, 0.09),
+    0 0 70px -24px rgba(255, 92, 53, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  color: var(--ppdm-l-ink);
+  backdrop-filter: blur(26px) saturate(1.45);
+  -webkit-backdrop-filter: blur(26px) saturate(1.45);
+}
+
+#ppdm-panel .ppdm-panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 6px 10px;
+  font-family: var(--ppdm-l-font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #c9411f;
+}
+#ppdm-panel .ppdm-panel-title::after {
+  content: "SIDE A / 002";
+  letter-spacing: 0.16em;
+  color: rgba(18, 16, 13, 0.4);
+}
+html.pikpak-dark #ppdm-panel .ppdm-panel-title { color: #ff8a63; }
+html.pikpak-dark #ppdm-panel .ppdm-panel-title::after { color: rgba(244, 241, 234, 0.36); }
+
+#ppdm-panel .ppdm-option {
+  position: relative;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-family: var(--ppdm-l-font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: rgba(18, 16, 13, 0.72);
+  transition: background 0.18s var(--ppdm-l-ease), border-color 0.18s ease,
+    color 0.18s ease, transform 0.18s var(--ppdm-l-ease);
+}
+#ppdm-panel .ppdm-option:hover {
+  background: rgba(18, 16, 13, 0.05);
+  border-color: rgba(18, 16, 13, 0.08);
+  color: #12100d;
+  transform: translateX(2px);
+}
+#ppdm-panel .ppdm-option.is-active {
+  background: linear-gradient(120deg, rgba(255, 92, 53, 0.22), rgba(255, 92, 53, 0.05));
+  border-color: rgba(255, 92, 53, 0.4);
+  color: #b03a19;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+#ppdm-panel .ppdm-option.is-active::after {
+  content: "";
+  margin-left: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff5c35;
+  box-shadow: 0 0 12px rgba(255, 92, 53, 0.9);
+}
+html.pikpak-dark #ppdm-panel .ppdm-option { color: rgba(244, 241, 234, 0.72); }
+html.pikpak-dark #ppdm-panel .ppdm-option:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.09);
+  color: #f4f1ea;
+}
+html.pikpak-dark #ppdm-panel .ppdm-option.is-active {
+  background: linear-gradient(120deg, rgba(255, 92, 53, 0.26), rgba(255, 92, 53, 0.07));
+  border-color: rgba(255, 92, 53, 0.42);
+  color: #ffab8f;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+#ppdm-panel .ppdm-panel-divider {
+  height: 1px;
+  margin: 10px 4px 8px;
+  background: linear-gradient(90deg, transparent, rgba(255, 92, 53, 0.5), rgba(255, 92, 53, 0.14) 62%, transparent) !important;
+}
+
+#ppdm-panel .ppdm-author {
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(18, 16, 13, 0.1);
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(255, 92, 53, 0.15), transparent 60%),
+    rgba(255, 255, 255, 0.34);
+}
+html.pikpak-dark #ppdm-panel .ppdm-author {
+  border-color: rgba(255, 255, 255, 0.1);
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(255, 92, 53, 0.2), transparent 60%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+#ppdm-panel .ppdm-avatar-ring {
+  background: conic-gradient(from 0deg, #ff7a57, #f4f1ea, #c9411f, #ff5c35);
+}
+#ppdm-panel .ppdm-avatar-face {
+  font-family: var(--ppdm-l-font-poster);
+  letter-spacing: 0.02em;
+  background: linear-gradient(140deg, #ff7a57 0%, #ff5c35 55%, #c9411f 120%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 16px rgba(255, 92, 53, 0.4);
+}
+#ppdm-panel .ppdm-avatar-status {
+  background: #7ad9a8;
+  border-color: #f4f1ea;
+  animation: ppdm-l-status 2.4s ease-out infinite;
+}
+html.pikpak-dark #ppdm-panel .ppdm-avatar-status { border-color: #141416; }
+
+#ppdm-panel .ppdm-author-name-text {
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+  color: #12100d !important;
+  font-family: var(--ppdm-l-font-serif) !important;
+  font-style: italic;
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+html.pikpak-dark #ppdm-panel .ppdm-author-name-text { color: #f4f1ea !important; }
+
+#ppdm-panel .ppdm-author-tag {
+  padding: 2px 6px;
+  border: 1px solid rgba(255, 92, 53, 0.26);
+  border-radius: 999px;
+  font-family: var(--ppdm-l-font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #b03a19;
+  background: rgba(255, 92, 53, 0.12);
+}
+html.pikpak-dark #ppdm-panel .ppdm-author-tag {
+  color: #ffab8f;
+  background: rgba(255, 92, 53, 0.16);
+  border-color: rgba(255, 92, 53, 0.32);
+}
+#ppdm-panel .ppdm-author-role {
+  font-family: var(--ppdm-l-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(18, 16, 13, 0.5);
+}
+html.pikpak-dark #ppdm-panel .ppdm-author-role { color: rgba(244, 241, 234, 0.5); }
+
+#ppdm-panel .ppdm-author-link {
+  margin-top: 8px;
+  padding: 9px 11px;
+  border-radius: 12px;
+  border: 1px solid rgba(18, 16, 13, 0.12);
+  background: rgba(255, 255, 255, 0.5);
+  font-family: var(--ppdm-l-font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #12100d;
+}
+#ppdm-panel .ppdm-author-link:hover {
+  color: #12100d;
+  border-color: rgba(255, 92, 53, 0.5);
+  background: linear-gradient(135deg, rgba(255, 92, 53, 0.14), rgba(255, 92, 53, 0.04));
+  box-shadow: 0 12px 26px -14px rgba(255, 92, 53, 0.7);
+}
+#ppdm-panel .ppdm-author-link:hover svg:last-child { color: #ff5c35; }
+html.pikpak-dark #ppdm-panel .ppdm-author-link {
+  color: rgba(244, 241, 234, 0.86);
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+html.pikpak-dark #ppdm-panel .ppdm-author-link:hover {
+  color: #ffffff;
+  border-color: rgba(255, 92, 53, 0.55);
+  background: linear-gradient(135deg, rgba(255, 92, 53, 0.2), rgba(255, 92, 53, 0.06));
+  box-shadow: 0 12px 28px -14px rgba(0, 0, 0, 0.7);
+}
+html.pikpak-dark #ppdm-panel .ppdm-author-link:hover svg:last-child { color: #ff8a63; }
+
+#ppdm-panel .ppdm-donate {
+  margin-top: 8px;
+  padding: 11px;
+  border-radius: 12px;
+  font-family: var(--ppdm-l-font-body);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff8f4;
+  background: linear-gradient(102deg, #ff7a57 0%, #ff5c35 58%, #c9411f 100%);
+  box-shadow: 0 12px 28px -12px rgba(255, 92, 53, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+#ppdm-panel .ppdm-donate:hover {
+  color: #fff8f4;
+  filter: brightness(1.06);
+  box-shadow: 0 18px 36px -14px rgba(255, 92, 53, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+html.pikpak-dark #ppdm-panel .ppdm-donate {
+  box-shadow: 0 14px 32px -12px rgba(255, 92, 53, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+html.pikpak-dark #ppdm-panel .ppdm-donate:hover {
+  box-shadow: 0 20px 40px -14px rgba(255, 92, 53, 0.78), inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+#ppdm-panel .ppdm-signature {
+  padding: 9px 0 2px;
+  font-family: var(--ppdm-l-font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(18, 16, 13, 0.45);
+}
+#ppdm-panel .ppdm-heart { color: #ff5c35; }
+html.pikpak-dark #ppdm-panel .ppdm-signature { color: rgba(244, 241, 234, 0.45); }
+
+/* compatibility credential + update row */
+#ppdm-panel .ppdm-compat {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 92, 53, 0.18);
+  background:
+    radial-gradient(130% 160% at 100% 0%, rgba(255, 92, 53, 0.14), transparent 58%),
+    rgba(255, 255, 255, 0.4);
+}
+#ppdm-panel .ppdm-compat:hover {
+  border-color: rgba(255, 92, 53, 0.34);
+  box-shadow: 0 10px 24px -14px rgba(255, 92, 53, 0.6);
+}
+#ppdm-panel .ppdm-compat-shield {
+  border-radius: 11px;
+  background: linear-gradient(140deg, #ff7a57, #ff5c35 60%, #c9411f);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 6px 16px rgba(255, 92, 53, 0.35);
+}
+#ppdm-panel .ppdm-compat-shield::after { border-color: rgba(255, 92, 53, 0.35); }
+#ppdm-panel .ppdm-compat-label,
+#ppdm-panel .ppdm-compat-sub { font-family: var(--ppdm-l-font-mono); }
+#ppdm-panel .ppdm-compat-app {
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+  color: #b03a19 !important;
+  font-family: var(--ppdm-l-font-mono);
+  font-weight: 700;
+}
+#ppdm-panel .ppdm-compat-pill {
+  color: #8a6a2f;
+  background: rgba(217, 178, 122, 0.18);
+  border-color: rgba(217, 178, 122, 0.36);
+}
+#ppdm-panel .ppdm-compat-pill i {
+  background: #d9b27a;
+  box-shadow: 0 0 0 2px rgba(217, 178, 122, 0.2);
+}
+html.pikpak-dark #ppdm-panel .ppdm-compat {
+  border-color: rgba(255, 92, 53, 0.26);
+  background:
+    radial-gradient(130% 160% at 100% 0%, rgba(255, 92, 53, 0.18), transparent 58%),
+    linear-gradient(135deg, rgba(255, 92, 53, 0.1), rgba(255, 255, 255, 0.02));
+}
+html.pikpak-dark #ppdm-panel .ppdm-compat:hover {
+  border-color: rgba(255, 92, 53, 0.44);
+  box-shadow: 0 12px 28px -16px rgba(255, 92, 53, 0.75);
+}
+html.pikpak-dark #ppdm-panel .ppdm-compat-app { color: #ffab8f !important; }
+html.pikpak-dark #ppdm-panel .ppdm-compat-pill {
+  color: #e8c996;
+  background: rgba(217, 178, 122, 0.16);
+  border-color: rgba(217, 178, 122, 0.34);
+}
+
+#ppdm-panel .ppdm-version-row {
+  font-family: var(--ppdm-l-font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+}
+#ppdm-panel .ppdm-version-row:hover {
+  background: rgba(255, 92, 53, 0.08);
+  border-color: rgba(255, 92, 53, 0.2);
+  color: #b03a19;
+}
+#ppdm-panel .ppdm-version-row[data-tone="update"] { color: #c9411f; }
+#ppdm-panel .ppdm-version-row[data-tone="update"] .ppdm-version-dot {
+  background: #ff5c35;
+  box-shadow: 0 0 0 3px rgba(255, 92, 53, 0.18);
+}
+#ppdm-panel .ppdm-version-row[data-tone="busy"] .ppdm-version-dot { background: #ff7a57; }
+html.pikpak-dark #ppdm-panel .ppdm-version-row { color: rgba(244, 241, 234, 0.5); }
+html.pikpak-dark #ppdm-panel .ppdm-version-row:hover {
+  background: rgba(255, 92, 53, 0.12);
+  border-color: rgba(255, 92, 53, 0.26);
+  color: #f4f1ea;
+}
+html.pikpak-dark #ppdm-panel .ppdm-version-row[data-tone="update"] { color: #ffab8f; }
+html.pikpak-dark #ppdm-panel .ppdm-version-dot { background: rgba(244, 241, 234, 0.34); }
+
+#ppdm-toggle .ppdm-update-dot {
+  background: linear-gradient(140deg, #ff7a57, #ff5c35 60%, #c9411f);
+  border-color: #f4f1ea;
+}
+html.pikpak-dark #ppdm-toggle .ppdm-update-dot { border-color: #0a0a0b; }
+
+/* --- landing popup: warm paper / graphite sleeve ------------------------- */
+
+html[data-pikpak-route^="#/landing"] {
+  --ppdm-landing-text: #12100d;
+  --ppdm-landing-muted: rgba(18, 16, 13, 0.62);
+  --ppdm-landing-surface: #f4f1ea;
+  --ppdm-landing-surface-2: #ece5d8;
+  --ppdm-landing-border: rgba(18, 16, 13, 0.12);
+  --ppdm-landing-border-strong: rgba(18, 16, 13, 0.2);
+  --ppdm-landing-glass: rgba(255, 255, 255, 0.55);
+  --ppdm-landing-hover: rgba(18, 16, 13, 0.06);
+  --ppdm-landing-icon-bg: rgba(18, 16, 13, 0.05);
+  --ppdm-landing-scrollbar: rgba(18, 16, 13, 0.22);
+  --ppdm-landing-accent: #d94f2b;
+  --ppdm-landing-accent-2: #c9411f;
+  --ppdm-landing-accent-soft: rgba(255, 92, 53, 0.12);
+  --ppdm-landing-accent-border: rgba(255, 92, 53, 0.28);
+  --ppdm-landing-hero: linear-gradient(135deg, #ffd9c7 0%, #f4e7cf 55%, #e8dcc4 100%);
+  --ppdm-landing-shadow: 0 34px 80px -26px rgba(60, 32, 18, 0.42), 0 12px 28px -18px rgba(60, 32, 18, 0.3);
+  --ppdm-landing-sheet-shadow: 0 34px 90px -24px rgba(60, 32, 18, 0.5);
+}
+html.pikpak-dark[data-pikpak-route^="#/landing"] {
+  --ppdm-landing-text: #f4f1ea;
+  --ppdm-landing-muted: rgba(244, 241, 234, 0.62);
+  --ppdm-landing-surface: #101012;
+  --ppdm-landing-surface-2: #0a0a0b;
+  --ppdm-landing-border: rgba(255, 255, 255, 0.1);
+  --ppdm-landing-border-strong: rgba(255, 255, 255, 0.18);
+  --ppdm-landing-glass: rgba(255, 255, 255, 0.06);
+  --ppdm-landing-hover: rgba(255, 255, 255, 0.07);
+  --ppdm-landing-icon-bg: rgba(255, 255, 255, 0.07);
+  --ppdm-landing-scrollbar: rgba(255, 255, 255, 0.18);
+  --ppdm-landing-accent: #ff7a57;
+  --ppdm-landing-accent-2: #ff5c35;
+  --ppdm-landing-accent-soft: rgba(255, 92, 53, 0.16);
+  --ppdm-landing-accent-border: rgba(255, 92, 53, 0.32);
+  --ppdm-landing-hero: linear-gradient(135deg, #2c130b 0%, #3d1a0e 48%, #151013 100%);
+  --ppdm-landing-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.92), 0 16px 36px -20px rgba(0, 0, 0, 0.8);
+  --ppdm-landing-sheet-shadow: 0 34px 96px -24px rgba(0, 0, 0, 0.96);
+}
+html[data-pikpak-route^="#/landing"] .box-shadow {
+  background: radial-gradient(80% 60% at 50% 0%, rgba(255, 92, 53, 0.18), rgba(255, 92, 53, 0) 70%) !important;
+}
+html[data-pikpak-route^="#/landing"] .drag-rect {
+  border-radius: 28px !important;
+  border-color: var(--ppdm-landing-border) !important;
+  background:
+    var(--ppdm-l-noise),
+    radial-gradient(120% 80% at 100% 0%, rgba(255, 92, 53, 0.12), transparent 60%),
+    var(--ppdm-landing-surface) !important;
+  background-size: 140px 140px, auto, auto !important;
+  box-shadow: var(--ppdm-landing-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .thumbnail-wrap::after {
+  background:
+    radial-gradient(120% 80% at 88% 6%, rgba(255, 92, 53, 0.38), transparent 55%),
+    linear-gradient(180deg, rgba(10, 6, 4, 0.34) 0%, rgba(10, 6, 4, 0) 30%, rgba(10, 6, 4, 0.08) 58%, rgba(10, 6, 4, 0.72) 100%) !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .operation::before {
+  font-family: var(--ppdm-l-font-mono);
+  letter-spacing: 0.18em;
+}
+html[data-pikpak-route^="#/landing"] .landing .operation .title {
+  font-family: var(--ppdm-l-font-body);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+html[data-pikpak-route^="#/landing"] .landing .video-name,
+html[data-pikpak-route^="#/landing"] .landing .thumbnail .name {
+  font-family: var(--ppdm-l-font-body);
+}
+html[data-pikpak-route^="#/landing"] .landing .operation .btn__create-task {
+  border-radius: 14px !important;
+  background: linear-gradient(102deg, #ff7a57 0%, #ff5c35 58%, #c9411f 100%) !important;
+  box-shadow:
+    0 16px 34px -12px rgba(255, 92, 53, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+html[data-pikpak-route^="#/landing"] .landing .operation .btn__create-task:hover {
+  box-shadow:
+    0 20px 40px -12px rgba(255, 92, 53, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+}
+html[data-pikpak-route^="#/landing"] .landing .cloud-download-folder {
+  border-radius: 12px;
+}
+html[data-pikpak-route^="#/landing"] .landing .cloud-download-folder .modify {
+  border-radius: 999px;
+}
+#ppdm-landing-close:hover {
+  background: rgba(255, 92, 53, 0.72) !important;
+  color: #fff8f4 !important;
+}
+#ppdm-landing-close:focus-visible { outline-color: #ff7a57 !important; }
+
+/* landing folder picker */
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page {
+  border-radius: 22px !important;
+  background:
+    var(--ppdm-l-noise),
+    var(--ppdm-landing-surface) !important;
+  background-size: 140px 140px, auto !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .mobile-dialog-header::before {
+  font-family: var(--ppdm-l-font-body);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .el-dialog__footer .el-button--primary:not(.is-link) {
+  background: linear-gradient(102deg, #ff7a57 0%, #ff5c35 58%, #c9411f 100%) !important;
+  box-shadow: 0 12px 26px -12px rgba(255, 92, 53, 0.7) !important;
+  font-weight: 700 !important;
+}
+html[data-pikpak-route^="#/landing"] .folder-selector.landing-page .folder-explorer__row.active {
+  border-color: rgba(255, 92, 53, 0.4) !important;
+  background: rgba(255, 92, 53, 0.12) !important;
+}
+
+/* --- motion ------------------------------------------------------------- */
+
+@keyframes ppdm-l-orbit { to { transform: rotate(1turn); } }
+@keyframes ppdm-l-status {
+  0% { box-shadow: 0 0 0 0 rgba(122, 217, 168, 0.55); }
+  70% { box-shadow: 0 0 0 5px rgba(122, 217, 168, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(122, 217, 168, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #ppdm-toggle::before,
+  #ppdm-panel .ppdm-avatar-status {
+    animation: none !important;
+  }
+  #ppdm-toggle,
+  #ppdm-panel .ppdm-option {
+    transition: none !important;
+  }
+}
+/* --- legacy cool-blue surfaces folded into the graphite sleeve ----------- */
+
+html.pikpak-dark .el-dialog.speed-save-dialog {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 92, 53, 0.14), transparent 58%),
+    linear-gradient(160deg, #151517 0%, #0a0a0b 100%) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+html.pikpak-dark .user-info:not(.premium) {
+  background:
+    radial-gradient(120% 100% at 100% 0%, rgba(255, 92, 53, 0.14), transparent 60%),
+    linear-gradient(135deg, #17171a, #101012) !important;
+}
+html.pikpak-dark .user-info:not(.premium) .name,
+html.pikpak-dark .user-info:not(.premium) .badge {
+  color: #f4f1ea !important;
+}
+html.pikpak-dark .user-info:not(.premium) .phone_email,
+html.pikpak-dark .user-info:not(.premium) .vip-expires {
+  color: rgba(244, 241, 234, 0.56) !important;
+}
+html.pikpak-dark .carousel-activity {
+  background:
+    radial-gradient(120% 100% at 100% 0%, rgba(255, 92, 53, 0.16), transparent 60%),
+    linear-gradient(180deg, #18181b 0%, #101012 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+html.pikpak-dark .carousel-activity .title,
+html.pikpak-dark .carousel-activity .title *,
+html.pikpak-dark .carousel-activity .content {
+  color: #f4f1ea !important;
+}
+html.pikpak-dark .el-loading-mask {
+  background-color: rgba(10, 10, 11, 0.72) !important;
+}
+html.pikpak-dark #ppdm-update[data-state="error"] .ppdm-update-status {
+  color: #e2685c;
+}
+/* --- interaction safety --------------------------------------------------
+   The panel lives inside the orb, so nothing in that subtree may move on
+   hover/press: a shifting hit-target makes the browser deliver mouseup to a
+   different element, and the click never reaches the button (the panel just
+   appears to bounce). Only the orb's inner icon animates.
+   ------------------------------------------------------------------------- */
+
+#ppdm-panel {
+  z-index: 2;
+  pointer-events: auto;
+}
+#ppdm-panel .ppdm-option:hover,
+#ppdm-panel .ppdm-author-link:hover,
+#ppdm-panel .ppdm-compat:hover,
+#ppdm-panel .ppdm-version-row:hover,
+#ppdm-panel .ppdm-donate:hover,
+#ppdm-panel .ppdm-donate:active {
+  transform: none;
+}
+
+/* While the panel is open the orb is hovered through its child; keep the
+   resting look instead of lighting up behind the panel. */
+#ppdm-toggle.is-open:hover {
+  background: radial-gradient(circle at 32% 26%, #ffffff, #f4f1ea 44%, #e4ddcf 100%);
+  border-color: rgba(18, 16, 13, 0.14);
+  box-shadow: 0 16px 36px -14px rgba(24, 18, 14, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+html.pikpak-dark #ppdm-toggle.is-open:hover {
+  background: radial-gradient(circle at 32% 26%, #2d2d30, #121214 58%, #08080a 100%);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 18px 40px -14px rgba(0, 0, 0, 0.95),
+    0 0 26px -8px rgba(255, 92, 53, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }

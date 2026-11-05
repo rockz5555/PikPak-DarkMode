@@ -507,7 +507,7 @@ if ($UpdateSource) {
     Write-Host "  Update source: $UpdateSource (test source; re-run without -UpdateSource to clear)" -ForegroundColor Yellow
 }
 Write-Host ''
-Write-Host 'Open PikPak and use the round button at the bottom-right, or press Ctrl+Shift+D.' -ForegroundColor Cyan
+Write-Host 'Open PikPak and use the round button in the top bar next to Settings, or press Ctrl+Shift+D.' -ForegroundColor Cyan
 Write-Host 'The chosen mode (Light / Dark / System) is remembered between launches.' -ForegroundColor Cyan
 Write-Host ''
 Write-Host 'PikPak updates replace index.html, so re-run this script after each update.' -ForegroundColor DarkGray

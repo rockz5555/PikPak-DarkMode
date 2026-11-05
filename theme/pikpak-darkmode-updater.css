@@ -5,6 +5,8 @@
  * theme stylesheet.
  */
 
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap");
+
 #ppdm-update {
   position: fixed;
   left: 18px;
@@ -23,15 +25,15 @@
     transform 0.34s cubic-bezier(0.22, 1.2, 0.36, 1);
   will-change: opacity, transform;
 
-  --ppdm-update-bg: rgba(255, 255, 255, 0.94);
-  --ppdm-update-border: rgba(16, 24, 40, 0.1);
-  --ppdm-update-text: #1b2028;
-  --ppdm-update-soft: #6b7484;
-  --ppdm-update-line: rgba(16, 24, 40, 0.09);
-  --ppdm-update-track: rgba(16, 24, 40, 0.1);
-  --ppdm-update-ghost: rgba(16, 24, 40, 0.03);
-  --ppdm-update-shadow: 0 18px 46px rgba(16, 24, 40, 0.22), 0 2px 8px rgba(16, 24, 40, 0.08);
-  --ppdm-update-accent: #4f8bff;
+  --ppdm-update-bg: rgba(244, 241, 234, 0.96);
+  --ppdm-update-border: rgba(18, 16, 13, 0.12);
+  --ppdm-update-text: #12100d;
+  --ppdm-update-soft: rgba(18, 16, 13, 0.56);
+  --ppdm-update-line: rgba(18, 16, 13, 0.1);
+  --ppdm-update-track: rgba(18, 16, 13, 0.12);
+  --ppdm-update-ghost: rgba(18, 16, 13, 0.04);
+  --ppdm-update-shadow: 0 22px 54px -20px rgba(60, 32, 18, 0.45), 0 2px 8px rgba(60, 32, 18, 0.1);
+  --ppdm-update-accent: #d94f2b;
 }
 
 #ppdm-update.is-visible {
@@ -456,15 +458,15 @@ html.ppdm-modal-open #ppdm-update {
 
 /* Dark theme */
 html.pikpak-dark #ppdm-update {
-  color: #f2f4f8;
-  --ppdm-update-bg: rgba(32, 34, 38, 0.94);
+  color: #f4f1ea;
+  --ppdm-update-bg: rgba(16, 16, 18, 0.96);
   --ppdm-update-border: rgba(255, 255, 255, 0.1);
-  --ppdm-update-text: #f2f4f8;
-  --ppdm-update-soft: #98a0ad;
+  --ppdm-update-text: #f4f1ea;
+  --ppdm-update-soft: rgba(244, 241, 234, 0.56);
   --ppdm-update-line: rgba(255, 255, 255, 0.08);
   --ppdm-update-track: rgba(255, 255, 255, 0.12);
   --ppdm-update-ghost: rgba(255, 255, 255, 0.07);
-  --ppdm-update-shadow: 0 22px 54px rgba(0, 0, 0, 0.6), 0 2px 10px rgba(0, 0, 0, 0.4);
+  --ppdm-update-shadow: 0 26px 60px -18px rgba(0, 0, 0, 0.9), 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 html.pikpak-dark #ppdm-update .ppdm-update-to {
   color: #9fc2ff;
@@ -522,4 +524,121 @@ html.pikpak-dark #ppdm-update .ppdm-update-compat svg { color: #6ee7b7; }
     transition-duration: 0.01ms !important;
   }
   #ppdm-update.is-visible { opacity: 1; transform: none; }
+}
+
+/* ==========================================================================
+   LOOPDROP reskin — graphite sleeve + signal orange
+   Typography, glow and controls follow the LOOPDROP deck: Manrope body, Anton
+   brand lockup and the signal-orange gradient on every primary action.
+   ========================================================================== */
+
+#ppdm-update {
+  font-family: "Manrope", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+}
+#ppdm-update .ppdm-update-card {
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 92, 53, 0.12), transparent 58%),
+    var(--ppdm-update-bg);
+}
+#ppdm-update .ppdm-update-glow {
+  background:
+    radial-gradient(60% 100% at 20% 100%, rgba(255, 92, 53, 0.28), transparent 70%),
+    radial-gradient(50% 100% at 80% 90%, rgba(217, 178, 122, 0.18), transparent 70%);
+}
+#ppdm-update .ppdm-update-badge {
+  background: linear-gradient(140deg, #ff7a57 0%, #ff5c35 58%, #c9411f 128%);
+  box-shadow: 0 8px 20px rgba(255, 92, 53, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+#ppdm-update[data-state="success"] .ppdm-update-badge {
+  background: linear-gradient(140deg, #54cfad 0%, #34c59a 60%, #7ad9a8 120%);
+  box-shadow: 0 8px 20px rgba(84, 207, 173, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+#ppdm-update[data-state="error"] .ppdm-update-badge {
+  background: linear-gradient(140deg, #e2685c 0%, #d94f2b 70%);
+  box-shadow: 0 8px 20px rgba(226, 104, 92, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+#ppdm-update .ppdm-update-brand {
+  font-family: "Anton", "Arial Narrow", Impact, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: linear-gradient(102deg, #c9411f 0%, #ff5c35 58%, #ff7a57 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+#ppdm-update[data-state="prompt"] .ppdm-update-status { color: #c9411f; }
+#ppdm-update .ppdm-update-to {
+  color: #c9411f;
+  background: rgba(255, 92, 53, 0.14);
+}
+#ppdm-update .ppdm-update-compat {
+  border-color: rgba(217, 178, 122, 0.3);
+  background: linear-gradient(135deg, rgba(255, 92, 53, 0.08), rgba(217, 178, 122, 0.14));
+}
+#ppdm-update .ppdm-update-compat svg { color: #b8914f; }
+#ppdm-update .ppdm-update-savings-delta {
+  background: linear-gradient(90deg, #ff5c35, #c9411f);
+}
+#ppdm-update .ppdm-update-notes li::before {
+  background: linear-gradient(135deg, #ff7a57, #c9411f);
+}
+#ppdm-update[data-step="download"] .ppdm-step[data-step="download"],
+#ppdm-update[data-step="verify"] .ppdm-step[data-step="verify"],
+#ppdm-update[data-step="install"] .ppdm-step[data-step="install"] {
+  color: #c9411f;
+}
+#ppdm-update[data-step="verify"] .ppdm-step[data-step="download"],
+#ppdm-update[data-step="install"] .ppdm-step[data-step="download"],
+#ppdm-update[data-step="install"] .ppdm-step[data-step="verify"] {
+  color: #22a37c;
+}
+#ppdm-update .ppdm-update-fill {
+  background: linear-gradient(90deg, #ff7a57 0%, #ff5c35 55%, #c9411f 100%);
+  box-shadow: 0 0 14px rgba(255, 92, 53, 0.6);
+}
+#ppdm-update .ppdm-btn.is-primary {
+  color: #fff8f4;
+  background: linear-gradient(102deg, #ff7a57 0%, #ff5c35 58%, #c9411f 100%);
+  box-shadow: 0 10px 24px -8px rgba(255, 92, 53, 0.66), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+#ppdm-update .ppdm-btn.is-primary:hover {
+  box-shadow: 0 14px 30px -8px rgba(255, 92, 53, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+#ppdm-update .ppdm-btn:not(.is-primary):not(.is-quiet):hover {
+  border-color: rgba(255, 92, 53, 0.44);
+  background: var(--ppdm-update-ghost);
+}
+#ppdm-update .ppdm-update-close:hover {
+  color: #c9411f;
+  background: rgba(255, 92, 53, 0.1);
+}
+html.pikpak-dark #ppdm-update .ppdm-update-card {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 92, 53, 0.18), transparent 58%),
+    var(--ppdm-update-bg);
+  box-shadow: var(--ppdm-update-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+html.pikpak-dark #ppdm-update .ppdm-update-brand {
+  background: linear-gradient(102deg, #ff7a57 0%, #ff5c35 55%, #ffab8f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+html.pikpak-dark #ppdm-update[data-state="prompt"] .ppdm-update-status { color: #ff8a63; }
+html.pikpak-dark #ppdm-update .ppdm-update-to {
+  color: #ffab8f;
+  background: rgba(255, 92, 53, 0.2);
+}
+html.pikpak-dark #ppdm-update .ppdm-update-compat {
+  border-color: rgba(217, 178, 122, 0.34);
+  background: linear-gradient(135deg, rgba(255, 92, 53, 0.14), rgba(217, 178, 122, 0.16));
+}
+html.pikpak-dark #ppdm-update .ppdm-update-compat svg { color: #e8c996; }
+html.pikpak-dark #ppdm-update .ppdm-update-close:hover {
+  color: #ffab8f;
+  background: rgba(255, 92, 53, 0.14);
 }

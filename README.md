@@ -40,7 +40,7 @@ Captured from PikPak 2.15.5 on Windows 11. Click an image to open it full size.
 | [![PikPak main window in dark mode](docs/screenshots/main-dark.png)](docs/screenshots/main-dark.png) | [![PikPak main window in light mode](docs/screenshots/main-light.png)](docs/screenshots/main-light.png) |
 | [![Theme panel in dark mode](docs/screenshots/theme-panel-dark.png)](docs/screenshots/theme-panel-dark.png) | [![Theme panel in light mode](docs/screenshots/theme-panel-light.png)](docs/screenshots/theme-panel-light.png) |
 
-The round button at the bottom-right opens the theme panel; <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd> toggles between light and dark.
+The round button in the top bar next to Settings opens the theme panel; <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd> toggles between light and dark.
 
 ## Quick start
 
@@ -58,7 +58,7 @@ The round button at the bottom-right opens the theme panel; <kbd>Ctrl</kbd> + <k
    .\apply-darkmode.ps1 -Restart
    ```
 
-That's it. Use the round button at the bottom-right of PikPak, or press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd>.
+That's it. Use the round button in PikPak's top bar next to Settings, or press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd>.
 
 > Running into `running scripts is disabled on this system`? Use the bypass form:
 >
@@ -117,7 +117,7 @@ PikPak Dark Mode status
 
 | Control                                           | Action                         |
 | ------------------------------------------------- | ------------------------------ |
-| Round button (bottom-right)                       | Opens the theme panel          |
+| Round button (top bar, next to Settings)          | Opens the theme panel          |
 | Light / Dark / System                             | Switches the active mode       |
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd> | Toggles between light and dark |
 | <kbd>Esc</kbd>                                    | Closes the panel               |
@@ -125,7 +125,7 @@ PikPak Dark Mode status
 | PikPak build badge (above the version row)         | Shows the exact PikPak build this patch was applied to and when |
 | <kbd>Esc</kbd> or close button (landing popup)     | Closes the landing window      |
 
-Your choice is stored in `localStorage` under `pikpak-theme` and restored on the next launch. The switcher hides itself on the player and file-manager routes so it never covers fullscreen content, and while a modal dialog is open. PikPak's separate window for external magnet links (`#/landing`) follows the saved mode but uses a compact, card-style layout that matches the main app: an inset artwork hero, a glass magnet pill, a gradient primary action, and a themed "Modify" folder picker that always fits the narrow window. The popup window itself is transparent, so the card floats on a small inset margin instead of painting a full-window black or white backdrop, and the artwork falls back to a soft light gradient in light mode and a deep one in dark mode. That popup never shows the floating switcher; use its own close button or <kbd>Esc</kbd> instead.
+Your choice is stored in `localStorage` under `pikpak-theme` and restored on the next launch. The switcher hides itself on the player and file-manager routes so it never covers fullscreen content, but it stays available in the top bar while a PikPak dialog is open. PikPak's separate window for external magnet links (`#/landing`) follows the saved mode but uses a compact, card-style layout that matches the main app: an inset artwork hero, a glass magnet pill, a gradient primary action, and a themed "Modify" folder picker that always fits the narrow window. The popup window itself is transparent, so the card floats on a small inset margin instead of painting a full-window black or white backdrop, and the artwork falls back to a soft light gradient in light mode and a deep one in dark mode. That popup never shows the floating switcher; use its own close button or <kbd>Esc</kbd> instead.
 
 ## How it works
 
