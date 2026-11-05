@@ -26,12 +26,16 @@
   var REPO = 'rockz5555/PikPak-DarkMode';
   var BRANCH = 'master';
 
-  // Mirror order: raw is freshest, the CDN is the fallback when raw is slow
-  // or blocked. Both serve the same files from the same commit.
+  // Branch mirrors are the fallback when the immutable commit root cannot be
+  // resolved. The CDN is last because its branch cache can lag badly.
   var MIRRORS = [
     'https://raw.githubusercontent.com/' + REPO + '/' + BRANCH + '/',
     'https://cdn.jsdelivr.net/gh/' + REPO + '@' + BRANCH + '/'
   ];
+
+  var API = 'https://api.github.com/repos/' + REPO;
+  var releaseRoot = '';
+  var resolvingRoot = null;
 
   var SOURCE_KEY = 'ppdm-update-source';   // optional base URL override (forks/testing)
   var STATE_KEY = 'ppdm-update-state';     // lastCheck, skippedVersion
@@ -280,6 +284,10 @@
     });
   }
 
+  function hasSourceOverride() {
+    try { return !!window.localStorage.getItem(SOURCE_KEY); } catch (e) { return false; }
+  }
+
   function sourceRoots() {
     var override = '';
     try { override = window.localStorage.getItem(SOURCE_KEY) || ''; } catch (e) { override = ''; }
@@ -287,7 +295,30 @@
       if (override.charAt(override.length - 1) !== '/') override += '/';
       return [override];
     }
-    return MIRRORS;
+    var roots = MIRRORS.slice();
+    if (releaseRoot && roots.indexOf(releaseRoot) === -1) roots.unshift(releaseRoot);
+    return roots;
+  }
+
+  // GitHub's raw branch URL can keep serving a stale manifest after a push.
+  // Resolve the branch to an immutable commit first; raw/<sha>/ stays fresh.
+  function resolveReleaseRoot() {
+    if (hasSourceOverride()) return Promise.resolve('');
+    if (resolvingRoot) return resolvingRoot;
+    resolvingRoot = request(API + '/commits/' + BRANCH + '?v=' + Date.now(), {
+      timeout: REQUEST_TIMEOUT
+    }).then(function (response) {
+      return response.json();
+    }).then(function (commit) {
+      var sha = commit && String(commit.sha || '');
+      if (!/^[0-9a-f]{40}$/i.test(sha)) throw new Error('commit');
+      releaseRoot = 'https://raw.githubusercontent.com/' + REPO + '/' + sha + '/';
+      return releaseRoot;
+    }).catch(function () {
+      releaseRoot = '';
+      return '';
+    });
+    return resolvingRoot;
   }
 
   function fromMirrors(path, parseJSON) {
@@ -296,10 +327,18 @@
 
     function attempt() {
       if (index >= roots.length) return Promise.reject(new Error('network'));
-      var url = roots[index++] + path + '?v=' + Date.now();
+      var root = roots[index++];
+      var url = root + path + '?v=' + Date.now();
       return request(url, { timeout: REQUEST_TIMEOUT }).then(function (response) {
         return parseJSON ? response.json() : response;
       }).catch(function () {
+        // If the immutable commit root failed, fall back to the branch mirrors
+        // and download from the same branch the manifest came from.
+        if (releaseRoot && root === releaseRoot) {
+          releaseRoot = '';
+          roots = sourceRoots();
+          index = 0;
+        }
         return attempt();
       });
     }
@@ -688,12 +727,17 @@
     }
     if (checking) return checking;
 
+    releaseRoot = '';
+    resolvingRoot = null;
+
     if (interactive) {
       setState('checking');
       dispatch('checking');
     }
 
-    checking = fromMirrors('update/manifest.json', true).then(function (raw) {
+    checking = resolveReleaseRoot().then(function () {
+      return fromMirrors('update/manifest.json', true);
+    }).then(function (raw) {
       var remote = normalizeManifest(raw);
       if (!remote) throw new Error('manifest');
       state.lastCheck = Date.now();
