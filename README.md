@@ -30,6 +30,17 @@ A drop-in dark theme for the **PikPak desktop app** — theme-aware controls and
 | **One-command restore**  | `-Restore` removes the injection and the copied assets, leaving your backups intact. |
 | **Zero dependencies**    | Plain PowerShell plus a few CSS/JS files. No build step, no runtime.                 |
 
+## Screenshots
+
+Captured from PikPak 2.15.5 on Windows 11. Click an image to open it full size.
+
+| Dark mode | Light mode |
+| :---: | :---: |
+| [![PikPak main window in dark mode](docs/screenshots/main-dark.png)](docs/screenshots/main-dark.png) | [![PikPak main window in light mode](docs/screenshots/main-light.png)](docs/screenshots/main-light.png) |
+| [![Theme panel in dark mode](docs/screenshots/theme-panel-dark.png)](docs/screenshots/theme-panel-dark.png) | [![Theme panel in light mode](docs/screenshots/theme-panel-light.png)](docs/screenshots/theme-panel-light.png) |
+
+The round button at the bottom-right opens the theme panel; <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd> toggles between light and dark.
+
 ## Quick start
 
 1. Clone or download this repository.
@@ -255,6 +266,11 @@ PikPak-DarkMode/
 ├─ update/
 │  └─ manifest.json          # published release manifest
 ├─ docs/
+│  ├─ screenshots/           # real app captures (dark + light)
+│  │  ├─ main-dark.png
+│  │  ├─ main-light.png
+│  │  ├─ theme-panel-dark.png
+│  │  └─ theme-panel-light.png
 │  ├─ preview.png            # project preview
 │  └─ updates.md             # updater architecture
 └─ backups/                  # generated: original index.html + version notes
