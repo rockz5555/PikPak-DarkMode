@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "version": "1.2.1",
+  "version": "1.2.2",
   "bootstrap": 3,
   "released": "2026-11-05",
   "notes": [
@@ -15,7 +15,7 @@
     "Refreshed dark and light screenshots in the README"
   ],
   "files": {
-    "pikpak-darkmode.css": { "sha256": "54003f1d52da75bbcd235f4d7f8e44bf0271f668b86cf6c455cafd3228ba2031", "size": 103402 },
+    "pikpak-darkmode.css": { "sha256": "bb82d2ae696a10f1ae06717a2eeb4c8bf5facac25928682f997db4d0c475b980", "size": 110504 },
     "pikpak-darkmode.js": { "sha256": "c1d3dbede2bb743b77ad87cf6956bfb791538801c40eb39a36dffb2033002b8b", "size": 19939 },
     "pikpak-darkmode-updater.css": { "sha256": "eb36e64e050d120aa83c2d852407ca0916bebd41eef6eb19bee702f3d5aa06cd", "size": 21465 },
     "pikpak-darkmode-updater.js": { "sha256": "5a3eef3eab62258722a6c0648b94172179816bd62b13c84f1640e48cc32df6b2", "size": 41141 }
