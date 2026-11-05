@@ -10,7 +10,7 @@ window.PIKPAK_DARKMODE_VERSION = {
   "bootstrap": 3,
   "released": "2026-11-05",
   "files": {
-    "pikpak-darkmode.css": { "sha256": "9d42f37fac05fcfdb729ec4388e3ff4ef7497d822691115e93d421ae1f6f7522", "size": 99645 },
+    "pikpak-darkmode.css": { "sha256": "54003f1d52da75bbcd235f4d7f8e44bf0271f668b86cf6c455cafd3228ba2031", "size": 103402 },
     "pikpak-darkmode.js": { "sha256": "c1d3dbede2bb743b77ad87cf6956bfb791538801c40eb39a36dffb2033002b8b", "size": 19939 },
     "pikpak-darkmode-updater.css": { "sha256": "eb36e64e050d120aa83c2d852407ca0916bebd41eef6eb19bee702f3d5aa06cd", "size": 21465 },
     "pikpak-darkmode-updater.js": { "sha256": "a053949cf788c38ad6145d447edd9a2a5107f59ea3ffc87066ea6326a3dca767", "size": 39527 }
