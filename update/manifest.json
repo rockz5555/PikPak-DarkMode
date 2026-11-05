@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "version": "1.1.2",
+  "version": "1.1.3",
   "bootstrap": 3,
   "released": "2026-11-05",
   "notes": [
@@ -9,9 +9,9 @@
     "A dismissed prompt returns after a restart"
   ],
   "files": {
-    "pikpak-darkmode.css": { "sha256": "033d6ad59ce632b25952f33a94a68e8350c289e3ce08be1af6952edf15b4f2cb", "size": 71690 },
-    "pikpak-darkmode.js": { "sha256": "7c0e17d38612597cd0c5074f16c8514f4c2ccffef3d28630fba3f8d3c85ad3b8", "size": 20405 },
-    "pikpak-darkmode-updater.css": { "sha256": "5b1fd0e7aaa1dd7ffaae25f6cb95e751854f15b6859f4a267129069b8988aa1b", "size": 17094 },
-    "pikpak-darkmode-updater.js": { "sha256": "0d862ee046ba564b5498ea5cdbfb2da82922a3282aeeb576153919b5615673ed", "size": 40955 }
+    "pikpak-darkmode.css": { "sha256": "0fbec8dc74e24d098e8a89a6c1b8c3010783cf8a917e25dbcaf3977e4a04ed93", "size": 69568 },
+    "pikpak-darkmode.js": { "sha256": "c1d3dbede2bb743b77ad87cf6956bfb791538801c40eb39a36dffb2033002b8b", "size": 19939 },
+    "pikpak-darkmode-updater.css": { "sha256": "08f54010c50555cf35a665c11b89811ca56296bc0da94200a97e9a4b2650a892", "size": 16569 },
+    "pikpak-darkmode-updater.js": { "sha256": "1d4af23a9bab13b7a3ac5a7e29408f6c91621d110ab6ef477b6a41ee1ad83c7d", "size": 39868 }
   }
 }

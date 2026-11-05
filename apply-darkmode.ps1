@@ -424,8 +424,14 @@ Write-Host "Backup created: $backupPath" -ForegroundColor DarkGray
 # Copy assets next to the app's index.html
 $assetDir = Join-Path $MainRenderer $AssetName
 New-Item -ItemType Directory -Force -Path $assetDir | Out-Null
+# The release manifest hashes LF bytes (what GitHub serves), so normalize the
+# installed copies as well. Otherwise a CRLF checkout would look changed.
+$themeUtf8 = New-Object System.Text.UTF8Encoding($false)
 foreach ($name in $ThemeFiles) {
-    Copy-Item -LiteralPath (Join-Path $ThemeSource $name) -Destination (Join-Path $assetDir $name) -Force
+    $source = Join-Path $ThemeSource $name
+    $target = Join-Path $assetDir $name
+    $text = [System.IO.File]::ReadAllText($source)
+    [System.IO.File]::WriteAllText($target, ($text -replace "`r`n", "`n"), $themeUtf8)
 }
 
 # Register the local update helper so the card can install deltas without a

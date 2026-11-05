@@ -65,6 +65,19 @@ foreach ($name in $assets) {
     }
 }
 
+# GitHub serves the committed blobs with LF line endings. Normalize the local
+# assets before hashing so the manifest describes the bytes the updater will
+# actually download, even if an editor saved a file with CRLF.
+$utf8 = New-Object System.Text.UTF8Encoding($false)
+foreach ($name in $assets) {
+    $path = Join-Path $ThemeDir $name
+    $text = [System.IO.File]::ReadAllText($path)
+    $normalized = $text -replace "`r`n", "`n"
+    if ($text -ne $normalized) {
+        [System.IO.File]::WriteAllText($path, $normalized, $utf8)
+    }
+}
+
 $files = [ordered]@{}
 foreach ($name in $assets) {
     $path = Join-Path $ThemeDir $name
@@ -81,7 +94,7 @@ $released = (Get-Date).ToUniversalTime().ToString('yyyy-MM-dd')
 $fileEntries = ($files.Keys | ForEach-Object {
     $entry = $files[$_]
     '    "{0}": {{ "sha256": "{1}", "size": {2} }}' -f $_, $entry.sha256, $entry.size
-}) -join ",`r`n"
+}) -join ",`n"
 
 $versionSource = @"
 /*!
@@ -101,11 +114,10 @@ $fileEntries
 };
 "@
 
-$utf8 = New-Object System.Text.UTF8Encoding($false)
-[System.IO.File]::WriteAllText($VersionJs, ($versionSource -replace "`r?`n", "`r`n"), $utf8)
+[System.IO.File]::WriteAllText($VersionJs, ($versionSource -replace "`r?`n", "`n"), $utf8)
 
 if ($Notes.Count -gt 0) {
-    $notesJson = "[`r`n" + (($Notes | ForEach-Object { '    "{0}"' -f $_ }) -join ",`r`n") + "`r`n  ]"
+    $notesJson = "[`n" + (($Notes | ForEach-Object { '    "{0}"' -f $_ }) -join ",`n") + "`n  ]"
 } else {
     $notesJson = '[]'
 }
@@ -127,7 +139,7 @@ if (-not (Test-Path -LiteralPath $UpdateDir)) {
     New-Item -ItemType Directory -Force -Path $UpdateDir | Out-Null
 }
 $manifestPath = Join-Path $UpdateDir 'manifest.json'
-[System.IO.File]::WriteAllText($manifestPath, ($manifestSource -replace "`r?`n", "`r`n"), $utf8)
+[System.IO.File]::WriteAllText($manifestPath, ($manifestSource -replace "`r?`n", "`n"), $utf8)
 
 Write-Host ''
 Write-Host ('Release manifest built for v{0}' -f $Version) -ForegroundColor Green
