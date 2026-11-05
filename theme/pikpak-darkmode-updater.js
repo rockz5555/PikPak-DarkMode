@@ -73,6 +73,12 @@
     arrow:
       '<svg class="ppdm-update-arrow" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">' +
       '<path d="M4 12h14M12 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" ' +
+      'stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    shield:
+      '<svg class="ppdm-i-shield" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">' +
+      '<path d="M12 3l7 2.7v5.5c0 4.1-2.8 7.2-7 8.8-4.2-1.6-7-4.7-7-8.8V5.7z" fill="none" ' +
+      'stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>' +
+      '<path d="M8.7 12.1l2.2 2.2 4.4-4.6" fill="none" stroke="currentColor" stroke-width="2" ' +
       'stroke-linecap="round" stroke-linejoin="round"/></svg>'
   };
 
@@ -198,6 +204,24 @@
       released: String(local.released || ''),
       files: local.files && typeof local.files === 'object' ? local.files : {}
     };
+  }
+
+  // Same source order as the theme panel: installer-injected value first, then
+  // PikPak's own release tag, then an optional manifest field.
+  function patchInfo() {
+    var patch = window.__PPDM_PATCH__ || {};
+    var app = patch.app ? String(patch.app) : '';
+    var at = patch.at ? String(patch.at) : '';
+    if (!app) {
+      var release = window.SENTRY_RELEASE && window.SENTRY_RELEASE.id;
+      var match = release ? String(release).match(/@([0-9][0-9A-Za-z.\-]+)$/) : null;
+      if (match) app = match[1];
+    }
+    if (!app) {
+      var manifest = window.PIKPAK_DARKMODE_VERSION;
+      if (manifest && manifest.pikpak) app = String(manifest.pikpak);
+    }
+    return { app: app, at: at };
   }
 
   /* ------------------------------------------------------------------ */
@@ -399,6 +423,10 @@
                 ICONS.arrow +
                 '<span class="ppdm-update-to"></span>' +
               '</span>' +
+              '<span class="ppdm-update-compat" hidden>' +
+                ICONS.shield +
+                '<span class="ppdm-update-compat-text"></span>' +
+              '</span>' +
             '</div>' +
           '</div>' +
           '<button type="button" class="ppdm-update-close" data-action="close" ' +
@@ -448,6 +476,8 @@
     refs.arrow = refs.root.querySelector('.ppdm-update-arrow');
     refs.from = refs.root.querySelector('.ppdm-update-from');
     refs.to = refs.root.querySelector('.ppdm-update-to');
+    refs.compat = refs.root.querySelector('.ppdm-update-compat');
+    refs.compatText = refs.root.querySelector('.ppdm-update-compat-text');
     refs.savings = refs.root.querySelector('.ppdm-update-savings');
     refs.savingsDelta = refs.root.querySelector('.ppdm-update-savings-delta');
     refs.savingsText = refs.root.querySelector('.ppdm-update-savings-text');
@@ -458,6 +488,8 @@
     refs.eta = refs.root.querySelector('.ppdm-update-eta');
     refs.foot = refs.root.querySelector('.ppdm-update-foot');
 
+    syncCompatChip();
+
     refs.root.addEventListener('click', onAction);
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape' && isVisible()) dismiss();
@@ -466,6 +498,16 @@
 
   function setText(node, text) {
     if (node && node.textContent !== text) node.textContent = text;
+  }
+
+  function syncCompatChip() {
+    if (!refs.compat || !refs.compatText) return;
+    var info = patchInfo();
+    if (!info.app) return;
+    refs.compatText.textContent = 'PikPak ' + info.app;
+    refs.compat.title = 'This theme was last applied to PikPak ' + info.app +
+      (info.at ? ' on ' + info.at : '') + '.';
+    refs.compat.hidden = false;
   }
 
   // The version chips hide as a group when there is nothing to compare, so the

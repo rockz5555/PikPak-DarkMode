@@ -26,6 +26,7 @@ A drop-in dark theme for the **PikPak desktop app** — theme-aware controls and
 | **Themed landing**       | The magnet-link card and folder picker follow the same light/dark theme.             |
 | **Themed dialogs**       | Cloud-download, completion, and external-player "Play Mode" popups match the theme.  |
 | **In-app updates**       | A delta updater card: only changed files, with Apply, Apply and restart, or skip.    |
+| **Knows its host**       | The panel names the exact PikPak build the patch was applied to, with the patch date. |
 | **Safe by design**       | Timestamped backups before every change and an idempotent installer you can re-run.  |
 | **One-command restore**  | `-Restore` removes the injection and the copied assets, leaving your backups intact. |
 | **Zero dependencies**    | Plain PowerShell plus a few CSS/JS files. No build step, no runtime.                 |
@@ -121,6 +122,7 @@ PikPak Dark Mode status
 | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd> | Toggles between light and dark |
 | <kbd>Esc</kbd>                                    | Closes the panel               |
 | Version row (bottom of the panel)                  | Checks for updates and shows their state |
+| PikPak build badge (above the version row)         | Shows the exact PikPak build this patch was applied to and when |
 | <kbd>Esc</kbd> or close button (landing popup)     | Closes the landing window      |
 
 Your choice is stored in `localStorage` under `pikpak-theme` and restored on the next launch. The switcher hides itself on the player and file-manager routes so it never covers fullscreen content, and while a modal dialog is open. PikPak's separate window for external magnet links (`#/landing`) follows the saved mode but uses a compact, card-style layout that matches the main app: an inset artwork hero, a glass magnet pill, a gradient primary action, and a themed "Modify" folder picker that always fits the narrow window. The popup window itself is transparent, so the card floats on a small inset margin instead of painting a full-window black or white backdrop, and the artwork falls back to a soft light gradient in light mode and a deep one in dark mode. That popup never shows the floating switcher; use its own close button or <kbd>Esc</kbd> instead.
@@ -137,6 +139,8 @@ Your choice is stored in `localStorage` under `pikpak-theme` and restored on the
    ...
    <!-- PIKPAK-DARKMODE:END -->
    ```
+
+   The same block carries a one-line `window.__PPDM_PATCH__` record with the PikPak build and install date, so the panel can name exactly which app version it was applied to. If that record is missing (for example, after an older install), the panel falls back to PikPak's own `SENTRY_RELEASE` id, then to an optional `pikpak` field in the theme manifest.
 
 5. Verifies the change. If verification fails, the backup is restored automatically.
 6. Installs a small local update helper in `%LOCALAPPDATA%\PikPak-DarkMode` and registers it for the current user, so the in-app updater can install future releases without touching the protected install folder. Use `-NoAgent` to skip this.
@@ -155,7 +159,9 @@ The theme checks for a new release shortly after launch (at most every six hours
 
 Only files that actually changed are downloaded. The release and the installed theme each carry a SHA-256 for every asset, so a typical release pulls one or two small files instead of the whole theme — the card states the saving up front ("2 of 4 files · 38 KB instead of 96 KB"). Every download is hashed before it is staged, and the helper re-hashes it before it touches disk.
 
-The card names the theme it belongs to ("PikPak Dark Mode", with the update state and version chips underneath), follows the active light or dark theme, never blocks the app, and hides itself on the player, file manager, magnet-link popup, and while a PikPak dialog is open. <kbd>Esc</kbd> dismisses it for the session; *Skip this version* is the persistent choice. A pulsing dot on the floating switcher and a status row in the theme panel ("v1.0.0 · Up to date") keep the state visible without nagging.
+The card names the theme it belongs to ("PikPak Dark Mode", with the update state and version chips underneath) and carries a small green shield chip naming the PikPak build it was last applied to. It follows the active light or dark theme, never blocks the app, and hides itself on the player, file manager, magnet-link popup, and while a PikPak dialog is open. <kbd>Esc</kbd> dismisses it for the session; *Skip this version* is the persistent choice. A pulsing dot on the floating switcher and a status row in the theme panel ("v1.1.0 · Up to date") keep the state visible without nagging.
+
+The theme panel shows the host build above that row — for example `PikPak 2.15.5.5917`, `Last patched 5 Nov 2026`, and a green **Tested** badge — so it is obvious which PikPak version the patch belongs to. The same build appears as a compact shield chip on the update card.
 
 The helper is a loopback-only process (`127.0.0.1:48179`) started by the installer. It is protected by a per-install token, only accepts `pikpak-darkmode*` `.css`/`.js` files inside the theme folder, keeps one timestamped backup per update, and replaces files through a temporary copy — a failed update leaves the previous theme intact. See [docs/updates.md](docs/updates.md) for the full protocol.
 

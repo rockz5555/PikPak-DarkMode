@@ -444,6 +444,8 @@ $SourceInject    = ''
 if ($UpdateSource) {
     $SourceInject = 'try{localStorage.setItem("ppdm-update-source","' + $UpdateSource + '");}catch(e){}'
 }
+$PatchDate       = Get-Date -Format 'yyyy-MM-dd'
+$PatchInject     = '<script id="ppdm-patch">window.__PPDM_PATCH__={app:"' + $Version + '",at:"' + $PatchDate + '"};</script>'
 
 # Build the injected block
 $block = @"
@@ -451,6 +453,7 @@ $block = @"
 <link rel="stylesheet" href="./pikpak-darkmode/pikpak-darkmode.css">
 <link rel="stylesheet" href="./pikpak-darkmode/pikpak-darkmode-updater.css">
 <script id="ppdm-boot">(function(){try{var r=document.documentElement,h=location.hash||'';r.setAttribute('data-pikpak-route',h||'#/');$AgentInject $SourceInject if(/^#(?:player|file-manager)\b/.test(h))return;var m=localStorage.getItem('pikpak-theme')||'system';var d=m==='dark'||(m!=='light'&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)r.classList.add('pikpak-dark');r.setAttribute('data-pikpak-theme-mode',m);}catch(e){}})();</script>
+$PatchInject
 <script src="./pikpak-darkmode/pikpak-darkmode.version.js"></script>
 <script src="./pikpak-darkmode/pikpak-darkmode.js" defer></script>
 <script src="./pikpak-darkmode/pikpak-darkmode-updater.js" defer></script>

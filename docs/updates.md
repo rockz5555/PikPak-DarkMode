@@ -30,9 +30,9 @@ page cannot `fetch()` a sibling JSON file — but it *can* load a script.
 
 ```js
 window.PIKPAK_DARKMODE_VERSION = {
-  "version": "1.0.0",
-  "bootstrap": 2,
-  "released": "2026-11-04",
+  "version": "1.1.0",
+  "bootstrap": 3,
+  "released": "2026-11-05",
   "files": {
     "pikpak-darkmode.css": { "sha256": "…", "size": 51234 },
     "pikpak-darkmode-updater.js": { "sha256": "…", "size": 18744 }
@@ -43,6 +43,17 @@ window.PIKPAK_DARKMODE_VERSION = {
 `bootstrap` is the revision of the injected loader block. When a release needs a
 new `<script>` or a new permission, bump `-Bootstrap` and the card tells the
 user to re-run the installer once. Assets can still be updated normally.
+
+The installer also injects a one-line record next to the loader:
+
+```html
+<script id="ppdm-patch">window.__PPDM_PATCH__={app:"2.15.5.5917",at:"2026-11-05"};</script>
+```
+
+The panel prefers this record when showing the "last patched" PikPak build. If it
+is absent, `patchInfo()` falls back to `window.SENTRY_RELEASE.id` (for example
+`PikPak@2.15.5.5917`), then to an optional `pikpak` field in the manifest, and
+hides the badge if no build can be identified.
 
 ## 2. Version check
 

@@ -41,7 +41,7 @@ param(
 
     [string[]]$Notes = @(),
 
-    [int]$Bootstrap = 2
+    [int]$Bootstrap = 3
 )
 
 $ErrorActionPreference = 'Stop'

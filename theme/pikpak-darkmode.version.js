@@ -6,13 +6,13 @@
  * downloads the files whose SHA-256 differs.
  */
 window.PIKPAK_DARKMODE_VERSION = {
-  "version": "1.0.0",
-  "bootstrap": 2,
+  "version": "1.1.0",
+  "bootstrap": 3,
   "released": "2026-11-05",
   "files": {
-    "pikpak-darkmode.css": { "sha256": "d2fcfad39b6473c4d6fd2f789fb40b950e33b1bb68af2aa3dbabdaaab2438445", "size": 66468 },
-    "pikpak-darkmode.js": { "sha256": "2325ca7b303d1a6af60e64624ab9aa1aa9543be23434d06e636a2809d0848c11", "size": 17196 },
-    "pikpak-darkmode-updater.css": { "sha256": "efa237f59b073cd63c94eb3f1dc4f185ff731a6bc5d643441823113c8882d2cc", "size": 15669 },
-    "pikpak-darkmode-updater.js": { "sha256": "d66255b2cd7f63ef9fd16b7c62a06fe481c58cca1d4473a27e47f8239ec6bfcb", "size": 37345 }
+    "pikpak-darkmode.css": { "sha256": "033d6ad59ce632b25952f33a94a68e8350c289e3ce08be1af6952edf15b4f2cb", "size": 71690 },
+    "pikpak-darkmode.js": { "sha256": "7c0e17d38612597cd0c5074f16c8514f4c2ccffef3d28630fba3f8d3c85ad3b8", "size": 20405 },
+    "pikpak-darkmode-updater.css": { "sha256": "e263e6b88d4b7a1a2944df8024f362ef0287a97d17293dfdf768e819712204c3", "size": 16508 },
+    "pikpak-darkmode-updater.js": { "sha256": "4e5f2951b5fb38521cf995de38a4e1402bafadb09b1f15de058099873b79863c", "size": 39193 }
   }
 };
