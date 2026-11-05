@@ -7,7 +7,7 @@
   "files": {
     "pikpak-darkmode.css": { "sha256": "d2fcfad39b6473c4d6fd2f789fb40b950e33b1bb68af2aa3dbabdaaab2438445", "size": 66468 },
     "pikpak-darkmode.js": { "sha256": "2325ca7b303d1a6af60e64624ab9aa1aa9543be23434d06e636a2809d0848c11", "size": 17196 },
-    "pikpak-darkmode-updater.css": { "sha256": "6a1a7260f0cd70de7d82bb895d6d89190737f96ea63566654fdf35d9e5295a49", "size": 15573 },
-    "pikpak-darkmode-updater.js": { "sha256": "8033851ae90850b116d747bdea17580c6895d6b1ae88699dbdf9e7e6c3821404", "size": 36916 }
+    "pikpak-darkmode-updater.css": { "sha256": "efa237f59b073cd63c94eb3f1dc4f185ff731a6bc5d643441823113c8882d2cc", "size": 15669 },
+    "pikpak-darkmode-updater.js": { "sha256": "d66255b2cd7f63ef9fd16b7c62a06fe481c58cca1d4473a27e47f8239ec6bfcb", "size": 37345 }
   }
 }

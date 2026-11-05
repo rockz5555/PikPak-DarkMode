@@ -24,7 +24,7 @@
   /* ------------------------------------------------------------------ */
 
   var REPO = 'rockz5555/PikPak-DarkMode';
-  var BRANCH = 'main';
+  var BRANCH = 'master';
 
   // Mirror order: raw is freshest, the CDN is the fallback when raw is slow
   // or blocked. Both serve the same files from the same commit.
@@ -51,10 +51,16 @@
     /^#\/landing(?:[\/?]|$)/.test(hash);
 
   var ICONS = {
-    spark:
-      '<svg class="ppdm-i-spark" viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">' +
-      '<path d="M11.4 2.4l1.9 5.1 5.1 1.9-5.1 1.9-1.9 5.1-1.9-5.1-5.1-1.9 5.1-1.9z" fill="currentColor"/>' +
-      '<path d="M18.6 14.6l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" fill="currentColor" opacity=".62"/>' +
+    update:
+      '<svg class="ppdm-i-update" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">' +
+      '<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" fill="none" stroke="currentColor" ' +
+      'stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M21 3v5h-5" fill="none" stroke="currentColor" stroke-width="2" ' +
+      'stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" fill="none" stroke="currentColor" ' +
+      'stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M8 16H3v5" fill="none" stroke="currentColor" stroke-width="2" ' +
+      'stroke-linecap="round" stroke-linejoin="round"/>' +
       '</svg>',
     check:
       '<svg class="ppdm-i-check" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">' +
@@ -382,7 +388,7 @@
         '<span class="ppdm-update-glow" aria-hidden="true"></span>' +
         '<div class="ppdm-update-head">' +
           '<span class="ppdm-update-badge" aria-hidden="true">' +
-            ICONS.spark + ICONS.check + ICONS.warn +
+            ICONS.update + ICONS.check + ICONS.warn +
           '</span>' +
           '<div class="ppdm-update-headtext">' +
             '<div class="ppdm-update-brand">PikPak Dark Mode</div>' +

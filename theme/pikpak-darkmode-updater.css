@@ -101,16 +101,17 @@ html.ppdm-modal-open #ppdm-update {
   position: absolute;
   opacity: 0;
   transform: scale(0.7);
+  transform-origin: center;
   transition: opacity 0.2s ease, transform 0.24s ease;
 }
-#ppdm-update .ppdm-update-badge .ppdm-i-spark { opacity: 1; transform: none; }
+#ppdm-update .ppdm-update-badge .ppdm-i-update { opacity: 1; transform: none; }
 
 #ppdm-update[data-state="success"] .ppdm-update-badge {
   background: linear-gradient(140deg, #22b573 0%, #34c759 60%, #6ee7a8 120%);
   box-shadow: 0 7px 18px rgba(34, 181, 115, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.42);
 }
-#ppdm-update[data-state="success"] .ppdm-i-spark,
-#ppdm-update[data-state="error"] .ppdm-i-spark { opacity: 0; transform: scale(0.7); }
+#ppdm-update[data-state="success"] .ppdm-i-update,
+#ppdm-update[data-state="error"] .ppdm-i-update { opacity: 0; transform: scale(0.7); }
 #ppdm-update[data-state="success"] .ppdm-i-check { opacity: 1; transform: none; }
 #ppdm-update[data-state="success"] .ppdm-i-check path {
   stroke-dasharray: 30;
@@ -420,7 +421,9 @@ html.ppdm-modal-open #ppdm-update {
 }
 #ppdm-update .ppdm-update-foot:empty { display: none; }
 
-#ppdm-update[data-state="checking"] .ppdm-update-badge .ppdm-i-spark { animation: ppdm-update-pulse 1.4s ease-in-out infinite; }
+#ppdm-update[data-state="checking"] .ppdm-update-badge .ppdm-i-update {
+  animation: ppdm-update-spin 1.2s linear infinite;
+}
 #ppdm-update[data-state="checking"] .ppdm-update-status::after {
   content: "";
   display: inline-block;
@@ -480,6 +483,9 @@ html.pikpak-dark #ppdm-update .ppdm-update-glow { opacity: 0.7; }
 @keyframes ppdm-update-breathe {
   0%, 100% { opacity: 0.6; }
   50% { opacity: 0.95; }
+}
+@keyframes ppdm-update-spin {
+  to { transform: rotate(360deg); }
 }
 @keyframes ppdm-update-pulse {
   0%, 100% { opacity: 0.9; }

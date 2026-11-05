@@ -46,7 +46,7 @@ user to re-run the installer once. Assets can still be updated normally.
 
 ## 2. Version check
 
-- Source: `https://raw.githubusercontent.com/rockz5555/PikPak-DarkMode/main/update/manifest.json`,
+- Source: `https://raw.githubusercontent.com/rockz5555/PikPak-DarkMode/master/update/manifest.json`,
   with jsDelivr as a fallback mirror and `?v=<timestamp>` to defeat the 5-minute
   cache.
 - Cadence: once per 6 hours, 5 seconds after launch, so startup is never blocked.
