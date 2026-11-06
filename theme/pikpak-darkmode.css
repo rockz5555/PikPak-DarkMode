@@ -450,6 +450,44 @@ html[data-pikpak-route^="#/landing"] #ppdm-toggle {
   display: none !important;
 }
 
+/* Hide the switcher behind dialogs and the account / feedback iframe pages */
+html.ppdm-modal-open #ppdm-toggle {
+  display: none !important;
+}
+
+html.pikpak-dark iframe#dialog_iframe[src*="/drive/account/"],
+html.pikpak-dark iframe#dialog_iframe[src*="/app-extension/feedback"],
+html.pikpak-dark iframe.pp-consumer-iframe[src*="/drive/account/"],
+html.pikpak-dark iframe.pp-consumer-iframe[src*="/app-extension/feedback"] {
+  filter: invert(1) hue-rotate(180deg) brightness(1.06);
+}
+
+.pp-consumer-iframe-wrapper:has(iframe.pp-consumer-iframe[src*="/drive/account/"]),
+.pp-consumer-iframe-wrapper:has(iframe.pp-consumer-iframe[src*="/app-extension/feedback"]) {
+  background:
+    radial-gradient(120% 100% at 50% 45%, rgba(255, 255, 255, 0.88), rgba(240, 242, 246, 0.8) 58%, rgba(226, 230, 236, 0.86)) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(1.25);
+  backdrop-filter: blur(26px) saturate(1.25);
+}
+html.pikpak-dark .pp-consumer-iframe-wrapper:has(iframe.pp-consumer-iframe[src*="/drive/account/"]),
+html.pikpak-dark .pp-consumer-iframe-wrapper:has(iframe.pp-consumer-iframe[src*="/app-extension/feedback"]) {
+  background:
+    radial-gradient(120% 100% at 50% 45%, rgba(38, 40, 46, 0.86), rgba(16, 17, 20, 0.84) 58%, rgba(6, 6, 7, 0.92)) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(1.35);
+  backdrop-filter: blur(26px) saturate(1.35);
+}
+
+@media (min-width: 769px) {
+  .pp-consumer-iframe-wrapper:has(iframe.pp-consumer-iframe[src*="/drive/account/"]) > iframe.pp-consumer-iframe {
+    clip-path: inset(10% max(0px, calc(50% - 480px)) round 16px);
+  }
+}
+@media (min-width: 929px) {
+  .pp-consumer-iframe-wrapper:has(iframe.pp-consumer-iframe[src*="/app-extension/feedback"]) > iframe.pp-consumer-iframe {
+    clip-path: inset(max(16px, calc(50% - 348.5px)) calc(50% - 448px) round 16px);
+  }
+}
+
 #ppdm-panel {
   position: absolute;
   right: 0;

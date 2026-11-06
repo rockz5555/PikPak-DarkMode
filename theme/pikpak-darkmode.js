@@ -13,7 +13,6 @@
   var GITHUB_USER = 'rockz5555';
   var AVATAR_URL = 'https://github.com/' + GITHUB_USER + '.png?size=96';
   var root = document.documentElement;
-
   // PikPak opens playback and the file manager in separate windows
   // (#player-container, #player-controller, #file-manager). Leave those
   // windows completely untouched: no dark class, no floating switcher.
@@ -200,7 +199,22 @@
   // display:none, so `:has(.el-overlay)` cannot be used to detect them: it
   // would treat a hidden overlay as an open dialog. Poll for one that is
   // really visible instead and mark the root element while it is open.
+  function isConsumerFrameOpen() {
+    var frames = document.querySelectorAll('.pp-consumer-iframe-wrapper, iframe.pp-consumer-iframe');
+    for (var i = 0; i < frames.length; i++) {
+      var el = frames[i];
+      var inline = el.getAttribute('style') || '';
+      if (inline.indexOf('display: none') !== -1) continue;
+      var style = window.getComputedStyle(el);
+      if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') continue;
+      var rect = el.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) return true;
+    }
+    return false;
+  }
+
   function isModalOpen() {
+    if (isConsumerFrameOpen()) return true;
     var overlays = document.querySelectorAll('.el-overlay');
     for (var i = 0; i < overlays.length; i++) {
       var el = overlays[i];
@@ -234,6 +248,16 @@
     }
   }
 
+  var syncTimer = null;
+  function scheduleSync() {
+    if (syncTimer) return;
+    syncTimer = setTimeout(function () {
+      syncTimer = null;
+      syncRoute();
+      syncModal();
+    }, 80);
+  }
+
   var watchersStarted = false;
   function startWatchers() {
     if (watchersStarted) return;
@@ -246,6 +270,8 @@
     // hashchange event; a light poll keeps the route attribute accurate and
     // notices modal dialogs that open or close without a route change.
     setInterval(function () { syncRoute(); syncModal(); }, 1000);
+    var observer = new MutationObserver(scheduleSync);
+    observer.observe(document.documentElement, { childList: true, subtree: true });
   }
 
   /* ---------- landing chrome ---------- */

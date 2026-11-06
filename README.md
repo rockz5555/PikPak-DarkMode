@@ -125,7 +125,7 @@ PikPak Dark Mode status
 | PikPak build badge (above the version row)         | Shows the exact PikPak build this patch was applied to and when |
 | <kbd>Esc</kbd> or close button (landing popup)     | Closes the landing window      |
 
-Your choice is stored in `localStorage` under `pikpak-theme` and restored on the next launch. The switcher hides itself on the player and file-manager routes so it never covers fullscreen content, but it stays available in the top bar while a PikPak dialog is open. PikPak's separate window for external magnet links (`#/landing`) follows the saved mode but uses a compact, card-style layout that matches the main app: an inset artwork hero, a glass magnet pill, a gradient primary action, and a themed "Modify" folder picker that always fits the narrow window. The popup window itself is transparent, so the card floats on a small inset margin instead of painting a full-window black or white backdrop, and the artwork falls back to a soft light gradient in light mode and a deep one in dark mode. That popup never shows the floating switcher; use its own close button or <kbd>Esc</kbd> instead.
+Your choice is stored in `localStorage` under `pikpak-theme` and restored on the next launch. The switcher hides itself on the player and file-manager routes so it never covers fullscreen content, and it also hides while a PikPak dialog or the Account & Security / Feedback iframe page is open. PikPak's separate window for external magnet links (`#/landing`) follows the saved mode but uses a compact, card-style layout that matches the main app: an inset artwork hero, a glass magnet pill, a gradient primary action, and a themed "Modify" folder picker that always fits the narrow window. The popup window itself is transparent, so the card floats on a small inset margin instead of painting a full-window black or white backdrop, and the artwork falls back to a soft light gradient in light mode and a deep one in dark mode. That popup never shows the floating switcher; use its own close button or <kbd>Esc</kbd> instead.
 
 ## How it works
 
@@ -228,8 +228,9 @@ This removes the injection and the copied theme assets. Backups in `backups/` ar
 | Update fails with a checksum warning    | Nothing was changed. Retry once; if it repeats, re-run the installer.                               |
 | Update prompt never appears             | It checks on every PikPak launch. A dismissed prompt returns on the next launch; **Skip this version** stays hidden until a newer release. You can also click the version row to check now. |
 | Script won't run                        | Use `powershell -ExecutionPolicy Bypass -File .\apply-darkmode.ps1`.                                |
-| Switcher invisible                      | It hides on player/file-manager and magnet-link (`#/landing`) routes and open dialogs by design, and can sit behind fullscreen video. |
+| Switcher invisible                      | It hides on player/file-manager and magnet-link (`#/landing`) routes, while a dialog or the Account & Security / Feedback page is open, and can sit behind fullscreen video. |
 | Magnet-link popup looks light           | The popup follows the saved mode. Switch the mode in the main window (or with Ctrl+Shift+D), then reopen the link. The popup has no floating switcher by design; use its close button or Esc. |
+| Account/Feedback photos look inverted   | Those pages load cross-origin, so dark mode inverts their card content. The frame is clipped to the card and the surrounding backdrop is replaced with the theme glass, but avatars and screenshots inside the card still invert. |
 | Avatar is a gradient "N"                | GitHub couldn't be reached; the fallback is intentional and retries on the next launch.             |
 
 ## Theme API
