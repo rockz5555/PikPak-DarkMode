@@ -190,6 +190,39 @@ function Test-AgentAlive {
     }
 }
 
+function Get-UpdateAgentProcesses {
+    Get-CimInstance Win32_Process -Filter "Name='powershell.exe' OR Name='pwsh.exe'" -ErrorAction SilentlyContinue |
+        Where-Object { $_.ProcessId -ne $PID -and $_.CommandLine -like '*ppdm-update-agent.ps1*' }
+}
+
+function Stop-UpdateAgent {
+    $processes = @(Get-UpdateAgentProcesses)
+    foreach ($process in $processes) {
+        try { Stop-Process -Id $process.ProcessId -Force -ErrorAction Stop } catch { }
+    }
+    if ($processes.Count -gt 0) {
+        $deadline = (Get-Date).AddSeconds(3)
+        while ((Get-Date) -lt $deadline -and @(Get-UpdateAgentProcesses).Count -gt 0) {
+            Start-Sleep -Milliseconds 100
+        }
+    }
+}
+
+function Test-AgentToken([string]$Token) {
+    try {
+        $body = @{ token = $Token } | ConvertTo-Json -Compress
+        Invoke-WebRequest -Uri ('http://127.0.0.1:{0}/apply' -f $AgentPort) `
+            -Method Post -ContentType 'application/json' -Body $body `
+            -UseBasicParsing -TimeoutSec 2 | Out-Null
+        return $true
+    } catch {
+        $status = 0
+        try { $status = [int]$_.Exception.Response.StatusCode } catch { }
+        # The agent answers 400 (bad-version) once the token is accepted.
+        return ($status -eq 400)
+    }
+}
+
 function Install-UpdateAgent {
     if (-not (Test-Path -LiteralPath $AgentSource)) {
         Write-Host 'Update helper script not found; in-app updates stay disabled.' -ForegroundColor Yellow
@@ -200,7 +233,8 @@ function Install-UpdateAgent {
     $agentPath = Join-Path $AgentHome 'ppdm-update-agent.ps1'
     Copy-Item -LiteralPath $AgentSource -Destination $agentPath -Force
 
-    # Reuse the existing token so a helper that is already running keeps working.
+    # Reuse the existing token when possible, but always restart the helper so
+    # it picks up the current config (token, themeDir, installDir).
     $token = ''
     if (Test-Path -LiteralPath $AgentConfigPath) {
         try {
@@ -211,6 +245,8 @@ function Install-UpdateAgent {
     if (-not $token) {
         $token = -join (1..32 | ForEach-Object { '{0:x}' -f (Get-Random -Maximum 16) })
     }
+
+    Stop-UpdateAgent
 
     $config = [ordered]@{
         port       = $AgentPort
@@ -231,15 +267,22 @@ function Install-UpdateAgent {
         Write-Host 'Could not register the update helper for this user.' -ForegroundColor Yellow
     }
 
-    $running = Test-AgentAlive
-    if (-not $running) {
-        try {
-            Start-Process -FilePath $psExe `
-                -ArgumentList ('-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "{0}"' -f $agentPath) `
-                -WindowStyle Hidden
-            Start-Sleep -Milliseconds 900
-            $running = Test-AgentAlive
-        } catch { }
+    $running = $false
+    try {
+        $started = Start-Process -FilePath $psExe `
+            -ArgumentList ('-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "{0}"' -f $agentPath) `
+            -WindowStyle Hidden -PassThru
+        Start-Sleep -Milliseconds 900
+        if ($started -and -not $started.HasExited) {
+            $config.pid = $started.Id
+            ($config | ConvertTo-Json -Depth 4) | Set-Content -LiteralPath $AgentConfigPath -Encoding UTF8
+        }
+        $running = Test-AgentAlive
+    } catch { }
+
+    if ($running -and -not (Test-AgentToken $token)) {
+        $running = $false
+        Write-Host 'The update helper is running with a stale token. Restart PikPak and run this script again.' -ForegroundColor Yellow
     }
 
     return [pscustomobject]@{
@@ -332,21 +375,19 @@ if (-not (Test-IsAdmin) -and -not $NoElevate) {
 # --------------------------------------------------------------------------
 
 if ($Restore) {
-    # Stop and unregister the local update helper first.
-    if (Test-Path -LiteralPath $AgentConfigPath) {
-        try {
-            $agentCfg = Get-Content -LiteralPath $AgentConfigPath -Raw | ConvertFrom-Json
-            if ($agentCfg.pid) {
-                $agentProc = Get-CimInstance Win32_Process -Filter ('ProcessId={0}' -f [int]$agentCfg.pid) -ErrorAction SilentlyContinue
-                if ($agentProc -and ($agentProc.CommandLine -like '*ppdm-update-agent.ps1*')) {
-                    Stop-Process -Id ([int]$agentCfg.pid) -Force -ErrorAction SilentlyContinue
-                }
-            }
-        } catch { }
-        Remove-ItemProperty -Path $AgentRunKey -Name $AgentRunName -ErrorAction SilentlyContinue
-        Remove-Item -LiteralPath $AgentConfigPath -Force -ErrorAction SilentlyContinue
-        Remove-Item -LiteralPath (Join-Path $AgentHome 'ppdm-update-agent.ps1') -Force -ErrorAction SilentlyContinue
-        Remove-Item -LiteralPath (Join-Path $AgentHome 'staging') -Recurse -Force -ErrorAction SilentlyContinue
+    # Stop and unregister the local update helper first. A previous restore may
+    # have deleted agent.json while leaving the helper process running, so stop
+    # by process command line as well as by the recorded pid.
+    $hadAgent = (Test-Path -LiteralPath $AgentConfigPath) -or
+        (Test-Path -LiteralPath (Join-Path $AgentHome 'ppdm-update-agent.ps1')) -or
+        (@(Get-UpdateAgentProcesses).Count -gt 0)
+
+    Stop-UpdateAgent
+    Remove-ItemProperty -Path $AgentRunKey -Name $AgentRunName -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath $AgentConfigPath -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath (Join-Path $AgentHome 'ppdm-update-agent.ps1') -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath (Join-Path $AgentHome 'staging') -Recurse -Force -ErrorAction SilentlyContinue
+    if ($hadAgent) {
         Write-Host 'Update helper stopped and unregistered.' -ForegroundColor Green
     }
 
